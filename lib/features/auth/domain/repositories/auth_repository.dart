@@ -1,7 +1,6 @@
 import 'package:marvel_animation_app/core/entities/entity_either.dart';
 
 import '../../../../core/network/error/failures.dart';
-import '../../../../shared/domain/models/api_response_model.dart';
 import '../models/user_model.dart';
 
 abstract class AuthRepository {

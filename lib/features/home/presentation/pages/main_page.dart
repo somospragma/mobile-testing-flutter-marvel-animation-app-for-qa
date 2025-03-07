@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marvel_animation_app/features/home/presentation/pages/home_page.dart';
 import 'package:marvel_animation_app/features/home/presentation/pages/profile_page.dart';
+import 'package:marvel_animation_app/shared/presentation/tokens/tokens.dart';
 import '../../../../shared/presentation/state/navigation_provider.dart';
 import '../../../../shared/presentation/templates/main_template.dart';
 
@@ -18,6 +19,8 @@ class MainScreen extends ConsumerWidget {
     final currentIndex = ref.watch(navigationProvider); 
 
     return MainTemplate(
+      hasScroll: false,
+      horizontalPadding: Spacing.NO_SPACE,
       displayBottomBar: true,
       body: _pages[currentIndex],
     );

@@ -13,13 +13,15 @@ class MainTemplate extends StatelessWidget {
       this.floatingActionButtonLocation,
       this.horizontalPadding = Spacing.SPACE_S,
       this.displayAppBar = true,
-      this.displayBottomBar = false});
+      this.displayBottomBar = false,
+      this.hasScroll = true});
   final Widget body;
   final Widget? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final double horizontalPadding;
   final bool displayAppBar;
   final bool displayBottomBar;
+  final bool hasScroll;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,8 @@ class MainTemplate extends StatelessWidget {
           child: Column(
             children: [
               if (displayAppBar) const CustomAppBar(),
-              Expanded(child: SingleChildScrollView(child: body)),
+              Expanded(
+                  child: hasScroll ? SingleChildScrollView(child: body) : body),
               if (displayBottomBar) const CustomBottomBar(),
             ],
           )),
