@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/entities/entity_either.dart';
 import '../../../../core/network/error/failures.dart';
-import '../../../../shared/domain/models/api_response_model.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/models/user_model.dart';
 

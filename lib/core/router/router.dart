@@ -6,8 +6,6 @@ import 'package:marvel_animation_app/features/home/presentation/pages/main_page.
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/auth/presentation/pages/sign_up_page.dart';
-import '../../features/home/presentation/pages/home_page.dart';
-import '../../features/home/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_screen.dart';
 
 // GoRouter configuration

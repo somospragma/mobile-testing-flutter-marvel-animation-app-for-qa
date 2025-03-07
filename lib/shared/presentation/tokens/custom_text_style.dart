@@ -44,4 +44,31 @@ class CustomTextStyle {
     decorationStyle: TextDecorationStyle.solid,
     decoration: TextDecoration.underline,
   );
+
+  static const TextStyle FONT_STYLE_TITLE_CARD = TextStyle(
+    fontFamily: 'Helvetica',
+    letterSpacing: 4,
+    height: 1.333,
+    fontSize: 12,
+    color: CustomColor.BRAND_PRIMARY_02,
+    fontWeight: FontWeight.bold
+  );
+
+  static const TextStyle FONT_STYLE_DESCRIPTION_CARD = TextStyle(
+    fontFamily: 'Helvetica',
+    letterSpacing: 4,
+    height: 1.333,
+    fontSize: 11,
+    color: CustomColor.BRAND_GRAY,
+    fontWeight: FontWeight.bold
+  );
+
+  static const TextStyle FONT_STYLE_BUTTON_CARD = TextStyle(
+    fontFamily: 'Helvetica',
+    letterSpacing: 1,
+    height: 1.333,
+    fontSize: 15,
+    color: CustomColor.BRAND_PRIMARY_02,
+    fontWeight: FontWeight.bold
+  );
 }

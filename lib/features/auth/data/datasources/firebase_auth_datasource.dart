@@ -17,13 +17,22 @@ class FirebaseAuthDataSource {
 
   FirebaseAuthDataSource(this._firebaseAuth);
 
-  Future<UserModel> logIn(String email, String password) async {
-    final UserCredential credential =
-        await _firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    return _mapFirebaseUserToEntity(credential.user);
+  Future<Either<Failure, UserModel>> logIn(
+      String email, String password) async {
+    try {
+      final UserCredential credential =
+          await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return Right(_mapFirebaseUserToEntity(credential.user));
+    } on FirebaseAuthException catch (e) {
+      String message = 'An error has occurred';
+
+      return Left(ServerFailure(e.message ?? message, 500));
+    } catch (e) {
+      return Left(ServerFailure(e.toString(), 500));
+    }
   }
 
   Future<Either<Failure, UserModel>> signUp(
