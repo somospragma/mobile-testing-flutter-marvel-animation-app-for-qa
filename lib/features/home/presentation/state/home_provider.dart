@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:marvel_animation_app/features/home/domain/models/heroe_model.dart';
@@ -6,6 +7,8 @@ import 'package:marvel_animation_app/shared/domain/models/item_model.dart';
 import '../../../../core/entities/entity_either.dart';
 import '../../../../core/network/error/failures.dart';
 import '../../../../core/router/router.dart';
+import '../../../../core/utils/constants/network_paths.dart';
+import '../../../../core/utils/url_launcher_service.dart';
 import '../../../../shared/domain/models/error_model.dart';
 import '../../../../shared/presentation/tokens/tokens.dart';
 import '../../domain/usecases/home_usecase.dart';
@@ -31,11 +34,11 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = state.copyWith();
   }
 
-  Future<void> getHeros() async {
+  Future<void> getHeroes() async {
     state = state.copyWith(isLoading: true);
-    
+
     final Either<Failure, List<HeroeModel>> response =
-        await authUsecase.getHeros(offset: state.offset);
+        await authUsecase.getHeroes(offset: state.offset);
     state = state.copyWith(isLoading: false);
     response.when((Failure left) {
       state = state.copyWith(
@@ -47,5 +50,18 @@ class HomeNotifier extends StateNotifier<HomeState> {
       state = state.copyWith(
           heroes: [...state.heroes, ...heroeItems], offset: state.offset + 20);
     });
+  }
+
+  Future<void> getHeroeComics(ItemModel hero, BuildContext context)  async {
+    state = state.copyWith(isLoading: true);
+    try {
+      WebViewService().openWebView(context, getCharacterComicsPath(character: hero.id));
+    } catch (e) {
+      state = state.copyWith(
+          alert: AlertModel(
+              message: 'No se pudo abrir el url',
+              backgroundColor: CustomColor.ERROR_COLOR));
+    }
+    state = state.copyWith(isLoading: false);
   }
 }
