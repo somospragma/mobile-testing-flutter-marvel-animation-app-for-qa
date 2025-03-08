@@ -20,6 +20,7 @@ class ConfigENV {
       apiKey: dotenv.env['API_KEY'] ?? '',
       ts: dotenv.env['TS'] ?? '',
       hash: dotenv.env['HASH'] ?? '',
+      webComicsUrl: dotenv.env['WEB_COMICS_URL'] ?? '',
     );
   }
 }

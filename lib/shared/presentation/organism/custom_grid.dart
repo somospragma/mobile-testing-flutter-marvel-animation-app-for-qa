@@ -5,9 +5,16 @@ import 'package:marvel_animation_app/shared/presentation/molecules/custom_card.d
 import 'package:marvel_animation_app/shared/presentation/tokens/tokens.dart';
 
 class CustomGrid extends ConsumerWidget {
-  const CustomGrid({super.key, required this.items, required this.controller});
+  const CustomGrid(
+      {super.key,
+      required this.items,
+      required this.controller,
+      required this.cardPressed,
+      required this.cardAction});
   final List<ItemModel> items;
   final ScrollController controller;
+  final Function(ItemModel, BuildContext) cardPressed;
+  final Function(ItemModel, BuildContext) cardAction;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,6 +32,8 @@ class CustomGrid extends ConsumerWidget {
           ),
           itemBuilder: (BuildContext context, int index) {
             return CustomCard(
+              cardPressed: () => cardPressed(items[index], context),
+              cardAction: () => cardAction(items[index], context),
               item: items[index],
             );
           }),

@@ -21,7 +21,7 @@ class HomeDatasource {
   Dio dio = DioNetwork.appAPI;
   EnvModel env = ConfigENV.intance.getAppEnv;
 
-  Future<Either<Failure, ApiResponseModel<List<HeroeModel>>>> getHeros(
+  Future<Either<Failure, ApiResponseModel<List<HeroeModel>>>> getHeroes(
       {required int offset}) async {
     try {
       final Response<Map<String, dynamic>> result =

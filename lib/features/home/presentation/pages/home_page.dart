@@ -21,7 +21,7 @@ class HomePageState extends ConsumerState<HomePage> {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScrollEnd);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(homeProvider.notifier).getHeros();
+      ref.read(homeProvider.notifier).getHeroes();
     });
   }
 
@@ -31,7 +31,7 @@ class HomePageState extends ConsumerState<HomePage> {
     if (_scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 100 &&
         !isLoading) {
-      ref.read(homeProvider.notifier).getHeros();
+      ref.read(homeProvider.notifier).getHeroes();
     }
   }
 
@@ -49,12 +49,15 @@ class HomePageState extends ConsumerState<HomePage> {
         ref.watch(homeProvider.select((HomeState state) => state.heroes));
     final int offset =
         ref.watch(homeProvider.select((HomeState state) => state.offset));
+    final homeNotifier =  ref.read(homeProvider.notifier);
 
     if (isLoading && offset == 0) {
       return const Center(child: CircularProgressIndicator());
     }
 
     return CustomGrid(
+      cardAction: homeNotifier.getHeroeComics,
+      cardPressed:  homeNotifier.getHeroeComics,
       items: heroes,
       controller: _scrollController,
     );

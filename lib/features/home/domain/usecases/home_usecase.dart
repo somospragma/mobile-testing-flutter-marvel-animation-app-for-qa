@@ -14,9 +14,9 @@ class HomeUsecase {
   HomeUsecase({required this.homeRepository});
   final HomeRepositoryImpl homeRepository;
 
-  Future<Either<Failure, List<HeroeModel>>> getHeros({required int offset}) async {
+  Future<Either<Failure, List<HeroeModel>>> getHeroes({required int offset}) async {
     final Either<Failure, List<HeroeModel>> response =
-        await homeRepository.getHeros(offset: offset);
+        await homeRepository.getHeroes(offset: offset);
 
     return response.when((Failure left) async {
       return Left<Failure, List<HeroeModel>>(left);
