@@ -18,7 +18,7 @@ final Provider<HomeDatasource> homeDatasourceProvider =
 });
 
 class HomeDatasource {
-  Dio dio = DioNetwork.appAPI;
+  Dio dio = DioNetwork.getDio();
   EnvModel env = ConfigENV.intance.getAppEnv;
 
   Future<Either<Failure, ApiResponseModel<List<HeroeModel>>>> getHeroes(

@@ -50,19 +50,22 @@ class CustomCard extends ConsumerWidget {
                 ),
               ),
             ),
-            ClipPath(
-              clipper: SlantedTopClipper(),
-              child: Container(
-                alignment: Alignment.center,
-                height: 40,
-                width: double.infinity,
-                color: CustomColor.BRAND_PRIMARY_01,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      top: Spacing.SPACE_RESPONSIVE_XS, left: 2, right: 2),
-                  child: Text(
-                    item.buttonText,
-                    style: CustomTextStyle.FONT_STYLE_BUTTON_CARD,
+            GestureDetector(
+              onTap: cardAction,
+              child: ClipPath(
+                clipper: SlantedTopClipper(),
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 40,
+                  width: double.infinity,
+                  color: CustomColor.BRAND_PRIMARY_01,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: Spacing.SPACE_RESPONSIVE_XS, left: 2, right: 2),
+                    child: Text(
+                      item.buttonText,
+                      style: CustomTextStyle.FONT_STYLE_BUTTON_CARD,
+                    ),
                   ),
                 ),
               ),

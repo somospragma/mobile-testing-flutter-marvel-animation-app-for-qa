@@ -14,7 +14,7 @@ class CustomGrid extends ConsumerWidget {
   final List<ItemModel> items;
   final ScrollController controller;
   final Function(ItemModel, BuildContext) cardPressed;
-  final Function(ItemModel, BuildContext) cardAction;
+  final VoidCallback cardAction;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,7 +33,7 @@ class CustomGrid extends ConsumerWidget {
           itemBuilder: (BuildContext context, int index) {
             return CustomCard(
               cardPressed: () => cardPressed(items[index], context),
-              cardAction: () => cardAction(items[index], context),
+              cardAction: cardAction,
               item: items[index],
             );
           }),

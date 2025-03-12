@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:marvel_animation_app/features/home/presentation/state/home_provider.dart';
 import 'package:marvel_animation_app/shared/presentation/organism/custom_grid.dart';
 
@@ -49,15 +50,15 @@ class HomePageState extends ConsumerState<HomePage> {
         ref.watch(homeProvider.select((HomeState state) => state.heroes));
     final int offset =
         ref.watch(homeProvider.select((HomeState state) => state.offset));
-    final homeNotifier =  ref.read(homeProvider.notifier);
+    final homeNotifier = ref.read(homeProvider.notifier);
 
     if (isLoading && offset == 0) {
       return const Center(child: CircularProgressIndicator());
     }
 
     return CustomGrid(
-      cardAction: homeNotifier.getHeroeComics,
-      cardPressed:  homeNotifier.getHeroeComics,
+      cardAction: () => context.push('/map'),
+      cardPressed: homeNotifier.getHeroeComics,
       items: heroes,
       controller: _scrollController,
     );

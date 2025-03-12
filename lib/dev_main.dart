@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app.dart';
 import 'core/env/config_env.dart';
-import 'core/network/dio_network.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -15,6 +14,5 @@ void main() async {
   );
   await ConfigENV.intance.loadEnvironment(fileName: '.local.env');
   await ScreenUtil.ensureScreenSize();
-  DioNetwork.initDio();
   runApp(const ProviderScope(child: MainApp()));
 }

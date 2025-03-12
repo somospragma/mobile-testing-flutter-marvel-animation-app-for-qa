@@ -30,8 +30,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, UserModel>> signUp(
-      String email, String password) async {
-    final user = await dataSource.signUp(email, password);
+      UserModel params) async {
+    final user = await dataSource.signUp(params);
     return user.when((Failure left) async {
       return Left<Failure, UserModel>(left);
     }, (UserModel right) async {

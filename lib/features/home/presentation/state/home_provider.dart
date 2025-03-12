@@ -8,7 +8,7 @@ import '../../../../core/entities/entity_either.dart';
 import '../../../../core/network/error/failures.dart';
 import '../../../../core/router/router.dart';
 import '../../../../core/utils/constants/network_paths.dart';
-import '../../../../core/utils/url_launcher_service.dart';
+import '../../../../core/utils/web_view_service.dart';
 import '../../../../shared/domain/models/error_model.dart';
 import '../../../../shared/presentation/tokens/tokens.dart';
 import '../../domain/usecases/home_usecase.dart';
