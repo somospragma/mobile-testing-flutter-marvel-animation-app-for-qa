@@ -30,7 +30,7 @@ class ProfilePage extends ConsumerWidget {
             height: Spacing.SPACE_RESPONSIVE_L,
           ),
           Text(
-            'Hi ${login.email}',
+            'Hi ${login.name}',
             style: CustomTextStyle.FONT_STYLE_TITLE,
           ),
           SizedBox(

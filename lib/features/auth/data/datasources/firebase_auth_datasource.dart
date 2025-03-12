@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,44 +10,78 @@ final AutoDisposeProvider<FirebaseAuthDataSource>
     firebaseAuthDataSourceProvider =
     Provider.autoDispose<FirebaseAuthDataSource>(
         (Ref<FirebaseAuthDataSource> ref) {
-  return FirebaseAuthDataSource(FirebaseAuth.instance);
+  return FirebaseAuthDataSource(
+    FirebaseAuth.instance,
+    FirebaseFirestore.instance,
+  );
 });
 
 class FirebaseAuthDataSource {
   final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestore;
 
-  FirebaseAuthDataSource(this._firebaseAuth);
+  FirebaseAuthDataSource(this._firebaseAuth, this._firestore);
 
-  Future<Either<Failure, UserModel>> signUp(
-      UserModel params) async {
+  Future<Either<Failure, UserModel>> signUp(UserModel params) async {
     try {
+      // Crear usuario en Firebase Auth
       final UserCredential credential =
-          await _firebaseAuth.createUserWithEmailAndPassword(
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: params.email,
         password: params.password ?? '',
       );
-      return Right(_mapFirebaseUserToEntity(credential.user));
+
+      final user = credential.user;
+      if (user == null) {
+        return Left(ServerFailure("User creation failed", 500));
+      }
+
+      // Guardar en Firestore
+      final userModel = UserModel(
+        uid: user.uid,
+        email: user.email!,
+        displayName: params.displayName,
+        gender: params.gender,
+      );
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .set(userModel.toJson());
+
+      return Right(userModel);
     } on FirebaseAuthException catch (e) {
-      String message = 'An error has occurred';
-      return Left(ServerFailure(e.message ?? message, 500));
+      return Left(ServerFailure(e.message ?? "An error has occurred", 500));
     } catch (e) {
       return Left(ServerFailure(e.toString(), 500));
     }
   }
 
-  Future<Either<Failure, UserModel>> logIn(String email, String password) async {
+  Future<Either<Failure, UserModel>> logIn(
+      String email, String password) async {
     try {
       final UserCredential credential =
           await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return Right(_mapFirebaseUserToEntity(credential.user));
+
+      final UserModel user =
+          await _fetchUserFromFirestore(credential.user!.uid);
+      return Right(user);
     } on FirebaseAuthException catch (e) {
-      String message = 'An error has occurred';
-      return Left(ServerFailure(e.message ?? message, 500));
+      return Left(ServerFailure(e.message ?? 'An error has occurred', 500));
     } catch (e) {
       return Left(ServerFailure(e.toString(), 500));
+    }
+  }
+
+  Future<UserModel> _fetchUserFromFirestore(String uid) async {
+    final doc = await _firestore.collection('users').doc(uid).get();
+    if (doc.exists) {
+      return UserModel.fromJson(doc.data()!);
+    } else {
+      throw Exception("User not found in Firestore");
     }
   }
 
@@ -56,14 +91,9 @@ class FirebaseAuthDataSource {
 
   Future<UserModel?> getCurrentUser() async {
     final user = _firebaseAuth.currentUser;
-    return user != null ? _mapFirebaseUserToEntity(user) : null;
-  }
-
-  UserModel _mapFirebaseUserToEntity(User? user) {
-    return UserModel(
-      uid: user!.uid,
-      email: user.email!,
-      displayName: user.displayName,
-    );
+    if (user != null) {
+      return _fetchUserFromFirestore(user.uid);
+    }
+    return null;
   }
 }

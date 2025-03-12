@@ -57,6 +57,7 @@ class LogInNotifier extends StateNotifier<LogInState> {
               message: left.errorMessage,
               backgroundColor: CustomColor.ERROR_COLOR));
     }, (UserModel right) async {
+      state = state.copyWith(name: right.displayName);
       router.push('/main');
     });
   }

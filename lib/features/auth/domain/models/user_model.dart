@@ -5,19 +5,21 @@ class UserModel {
     this.displayName,
     this.password,
     this.token,
+    this.gender,
   });
   final String email;
   final String? password;
   final String? token;
   final String? displayName;
   final String? uid;
+  final String? gender;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'username': email,
-      'password': password,
-      'firstName': displayName,
+      'email': email,
+      'name': displayName,
       'uid': uid,
+      'gender': gender,
     };
   }
 
@@ -28,6 +30,7 @@ class UserModel {
       token: json['token'].toString(),
       displayName: json['name'].toString(),
       uid: json['uid'].toString(),
+      gender: json['gender'].toString(),
     );
   }
 
@@ -37,6 +40,7 @@ class UserModel {
     String? token,
     String? name,
     String? uid,
+    String? gender,
   }) {
     return UserModel(
       email: email ?? this.email,
@@ -44,6 +48,7 @@ class UserModel {
       token: token ?? this.token,
       displayName: name ?? this.displayName,
       uid: uid ?? this.uid,
+      gender: gender ?? this.gender,
     );
   }
 }
