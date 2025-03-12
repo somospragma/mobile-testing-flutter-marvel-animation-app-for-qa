@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:marvel_animation_app/features/auth/presentation/state/log_in_provider.dart';
 import 'package:marvel_animation_app/shared/presentation/atoms/custom_button.dart';
 import 'package:marvel_animation_app/shared/presentation/tokens/tokens.dart';
 
-class ProfilePage extends StatelessWidget {
+import '../../../../shared/presentation/helpers/dialog_helper.dart';
+
+class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
-  static String test = 'Sharon';
+
+  void showLogoutDialog(BuildContext context) {
+    DialogHelper.showCustomDialog(
+        context: context,
+        title: "Sign Out",
+        message: "Are you sure you want to sign out?",
+        onConfirm: () => context.push('/'));
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final login = ref.watch(logInProvider);
     return Padding(
       padding: EdgeInsets.all(Spacing.SPACE_RESPONSIVE_M),
       child: Column(
@@ -17,7 +30,7 @@ class ProfilePage extends StatelessWidget {
             height: Spacing.SPACE_RESPONSIVE_L,
           ),
           Text(
-            'Hi $test',
+            'Hi ${login.email}',
             style: CustomTextStyle.FONT_STYLE_TITLE,
           ),
           SizedBox(
@@ -30,7 +43,7 @@ class ProfilePage extends StatelessWidget {
           ),
           CustomButton(
             text: 'Cerrar Sesión',
-            onTap: () => context.push('/'),
+            onTap: () => showLogoutDialog(context),
           )
         ],
       ),

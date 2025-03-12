@@ -43,7 +43,7 @@ class MapPageState extends ConsumerState<MapPage> {
         initialCameraPosition: CameraPosition(
           target: mapsNotifier.location?.first.position ??
               const LatLng(37.7749, -122.4194),
-          zoom: 12,
+          zoom: 10,
         ),
       ),
     );
