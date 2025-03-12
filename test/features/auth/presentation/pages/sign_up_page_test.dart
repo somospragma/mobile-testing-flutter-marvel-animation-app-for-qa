@@ -46,6 +46,6 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(find.text('Sign Up'), findsNWidgets(2));
+    expect(find.text('Sign Up'), findsOneWidget);
   });
 }

@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:marvel_animation_app/shared/presentation/organism/custom_grid.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthUsecase extends Mock implements AuthUsecase {}
@@ -30,7 +31,7 @@ void main() {
     mockGoRouter = MockGoRouter();
   });
 
-  testWidgets('Debe navegar a la pantalla de registro',
+  testWidgets('Debe navegar a la pantalla de home',
       (WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
@@ -46,6 +47,6 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(find.text('Home'), findsOneWidget);
+    expect(find.byType(CustomGrid), findsOneWidget);
   });
 }
