@@ -54,7 +54,7 @@ void main() {
         child: ScreenUtilInit(
           designSize: const Size(375, 812),
           child: MaterialApp.router(
-            routerConfig: goRouter, // Usa routerConfig en lugar de routerDelegate y otros
+            routerConfig: goRouter,
           ),
         ),
       ),
@@ -62,7 +62,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(find.text('Log in'), findsOneWidget);
+    expect(find.text('Log In'), findsOneWidget);
 
   });
 

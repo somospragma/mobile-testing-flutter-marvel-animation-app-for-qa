@@ -16,6 +16,7 @@ void main() {
         'username': 'test@example.com',
         'password': '123456',
         'firstName': 'John Doe',
+        'uid': null
       });
     });
 
