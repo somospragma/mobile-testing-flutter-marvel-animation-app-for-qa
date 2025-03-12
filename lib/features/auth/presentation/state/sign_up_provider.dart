@@ -61,12 +61,15 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   }
 
   Future<void> signUp() async {
-    if (state.email.isEmpty || state.password.isEmpty || state.name.isEmpty) {
+    if ([state.email, state.password, state.name, state.gender]
+            .any((field) => field.isEmpty) ||
+        !state.terms) {
       state = state.copyWith(
-          alert: AlertModel(
-              message: 'All fields are required',
-              backgroundColor: CustomColor.ERROR_COLOR));
-
+        alert: AlertModel(
+          message: 'All fields are required',
+          backgroundColor: CustomColor.ERROR_COLOR,
+        ),
+      );
       return;
     }
 
