@@ -29,9 +29,10 @@ class AuthUsecase {
   Future<Either<Failure, UserModel>> signUp(
       {required String email,
       required String password,
-      required String name}) async {
+      required String name,
+      required String gender}) async {
     final Either<Failure, UserModel> response = await authRepository
-        .signUp(UserModel(email: email, password: password, displayName: name));
+        .signUp(UserModel(email: email, password: password, displayName: name, gender: gender));
 
     return response.when((Failure left) async {
       return Left<Failure, UserModel>(left);

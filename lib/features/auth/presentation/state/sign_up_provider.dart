@@ -76,7 +76,10 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     state = state.copyWith(isLoading: true);
 
     final Either<Failure, UserModel> response = await authUsecase.signUp(
-        email: state.email, password: state.password, name: state.name);
+        email: state.email,
+        password: state.password,
+        name: state.name,
+        gender: state.gender);
     state = state.copyWith(isLoading: false);
     response.when((Failure left) {
       state = state.copyWith(
