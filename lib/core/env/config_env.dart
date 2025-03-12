@@ -21,6 +21,7 @@ class ConfigENV {
       ts: dotenv.env['TS'] ?? '',
       hash: dotenv.env['HASH'] ?? '',
       webComicsUrl: dotenv.env['WEB_COMICS_URL'] ?? '',
+      mapsApiUrl: dotenv.env['MAP_API_URL'] ?? '',
     );
   }
 }

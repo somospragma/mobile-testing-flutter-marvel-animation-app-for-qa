@@ -22,7 +22,7 @@ void main() {
   setUpAll(() async {
     await dotenv.load(fileName: ".env");
     await ConfigENV.intance.loadEnvironment();
-    DioNetwork.initDio();
+    DioNetwork.getDio();
   });
 
   setUp(() {

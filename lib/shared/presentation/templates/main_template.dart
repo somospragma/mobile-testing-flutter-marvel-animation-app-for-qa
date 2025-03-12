@@ -14,7 +14,8 @@ class MainTemplate extends StatelessWidget {
       this.horizontalPadding = Spacing.SPACE_S,
       this.displayAppBar = true,
       this.displayBottomBar = false,
-      this.hasScroll = true});
+      this.hasScroll = true,
+      this.onBack});
   final Widget body;
   final Widget? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
@@ -22,6 +23,7 @@ class MainTemplate extends StatelessWidget {
   final bool displayAppBar;
   final bool displayBottomBar;
   final bool hasScroll;
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class MainTemplate extends StatelessWidget {
               EdgeInsets.symmetric(horizontal: Spacing.SPACE_RESPONSIVE_XL),
           child: Column(
             children: [
-              if (displayAppBar) const CustomAppBar(),
+              if (displayAppBar) CustomAppBar(onBack: onBack),
               Expanded(
                   child: hasScroll ? SingleChildScrollView(child: body) : body),
               if (displayBottomBar) const CustomBottomBar(),

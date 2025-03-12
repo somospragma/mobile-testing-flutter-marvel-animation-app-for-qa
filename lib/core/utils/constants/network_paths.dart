@@ -9,3 +9,7 @@ String getCharacterComicsPath({required int character}) {
   EnvModel env = ConfigENV.intance.getAppEnv;
   return '${env.webComicsUrl}$character/3-d_man?utm_campaign=apiRef&utm_source=${env.apiKey}';
 }
+
+String getMapsPath() {
+  return 'satellites/25544';
+}
