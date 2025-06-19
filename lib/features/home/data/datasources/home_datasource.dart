@@ -9,8 +9,8 @@ import '../../../../core/network/error/exceptions.dart';
 import '../../../../core/network/error/failures.dart';
 import '../../../../core/utils/constants/network_paths.dart';
 import '../../../../shared/domain/models/api_response_model.dart';
-import '../../domain/mappers/heroe_mapper.dart';
-import '../../domain/models/heroe_model.dart';
+import '../mappers/hero_mapper.dart';
+import '../models/hero_model.dart';
 
 final Provider<HomeDatasource> homeDatasourceProvider =
     Provider<HomeDatasource>((Ref<HomeDatasource> ref) {
@@ -21,7 +21,7 @@ class HomeDatasource {
   Dio dio = DioNetwork.getDio();
   EnvModel env = ConfigENV.intance.getAppEnv;
 
-  Future<Either<Failure, ApiResponseModel<List<HeroeModel>>>> getHeroes(
+  Future<Either<Failure, ApiResponseModel<List<HeroModel>>>> getHeroes(
       {required int offset}) async {
     try {
       final Response<Map<String, dynamic>> result =
@@ -38,9 +38,9 @@ class HomeDatasource {
       }
 
       final List<dynamic> results = result.data!["data"]["results"] ?? [];
-      final List<HeroeModel> heroes = HeroeMapper.fromJsonList(results);
+      final List<HeroModel> heroes = HeroMapper.fromJsonList(results);
 
-      return Right(ApiResponseModel<List<HeroeModel>>(
+      return Right(ApiResponseModel<List<HeroModel>>(
         status: result.statusCode.toString(),
         results: heroes,
       ));

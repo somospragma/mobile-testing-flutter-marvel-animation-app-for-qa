@@ -1,6 +1,6 @@
 import '../../../../shared/domain/models/error_model.dart';
 import '../../../../shared/domain/models/item_model.dart';
-import '../../domain/models/heroe_model.dart';
+import '../../domain/entities/hero.dart' as hero_entity;
 
 class HomeState {
 
@@ -12,14 +12,14 @@ class HomeState {
     this.alert,
   });
   final List<ItemModel> heroes;
-  final HeroeModel? selectedHero;
+  final hero_entity.Hero? selectedHero;
   final bool isLoading;
   final AlertModel? alert;
   final int offset;
 
   HomeState copyWith({
     List<ItemModel>? heroes,
-    HeroeModel? selectedHero,
+    hero_entity.Hero? selectedHero,
     bool? isLoading,
     AlertModel? alert,
     int? offset,

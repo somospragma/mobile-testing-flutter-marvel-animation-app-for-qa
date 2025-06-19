@@ -1,7 +1,7 @@
 import '../../../../core/entities/entity_either.dart';
 import '../../../../core/network/error/failures.dart';
-import '../models/heroe_model.dart';
+import '../entities/hero.dart';
 
 abstract class HomeRepository {
-  Future<Either<Failure, List<HeroeModel>>> getHeroes({required int offset});
+  Future<Either<Failure, List<Hero>>> getHeroes({required int offset});
 }

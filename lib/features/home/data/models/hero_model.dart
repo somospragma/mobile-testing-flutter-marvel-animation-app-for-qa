@@ -1,5 +1,5 @@
-class HeroeModel {
-  const HeroeModel({
+class HeroModel {
+  const HeroModel({
     required this.id,
     this.name,
     this.description,
@@ -10,15 +10,15 @@ class HeroeModel {
   final String? name;
   final String? thumbnail;
 
-  HeroeModel copyWith({
+  HeroModel copyWith({
     int? id,
     String? description,
     String? name,
     String? thumbnail,
   }) {
-    return HeroeModel(
+    return HeroModel(
       id: id ?? this.id,
-      description: name ?? this.description,
+      description: description ?? this.description,
       name: name ?? this.name,
       thumbnail: thumbnail ?? this.thumbnail,
     );
