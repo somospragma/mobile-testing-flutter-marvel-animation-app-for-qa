@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/entities/entity_either.dart';
 import '../../../../core/network/error/failures.dart';
 import '../../data/repositories/auth_repository_impl.dart';
-import '../../domain/models/user_model.dart';
+import '../entities/user.dart';
 
 final AutoDisposeProvider<AuthUsecase> authUsecaseProvider =
     Provider.autoDispose<AuthUsecase>((Ref<AuthUsecase> ref) {
@@ -14,30 +14,30 @@ class AuthUsecase {
   AuthUsecase({required this.authRepository});
   final AuthRepositoryImpl authRepository;
 
-  Future<Either<Failure, UserModel>> logIn(
+  Future<Either<Failure, User>> logIn(
       {required String email, required String password}) async {
-    final Either<Failure, UserModel> response =
-        await authRepository.logIn(UserModel(email: email, password: password));
+    final Either<Failure, User> response =
+        await authRepository.logIn(User(email: email, password: password));
 
     return response.when((Failure left) async {
-      return Left<Failure, UserModel>(left);
-    }, (UserModel right) async {
-      return Right<Failure, UserModel>(right);
+      return Left<Failure, User>(left);
+    }, (User right) async {
+      return Right<Failure, User>(right);
     });
   }
 
-  Future<Either<Failure, UserModel>> signUp(
+  Future<Either<Failure, User>> signUp(
       {required String email,
       required String password,
       required String name,
       required String gender}) async {
-    final Either<Failure, UserModel> response = await authRepository
-        .signUp(UserModel(email: email, password: password, displayName: name, gender: gender));
+    final Either<Failure, User> response = await authRepository.signUp(
+        User(email: email, password: password, displayName: name, gender: gender));
 
     return response.when((Failure left) async {
-      return Left<Failure, UserModel>(left);
-    }, (UserModel right) async {
-      return Right<Failure, UserModel>(right);
+      return Left<Failure, User>(left);
+    }, (User right) async {
+      return Right<Failure, User>(right);
     });
   }
 }
