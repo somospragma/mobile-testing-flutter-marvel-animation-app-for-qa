@@ -5,6 +5,7 @@ import '../../../../core/entities/entity_either.dart';
 import '../../../../core/network/error/failures.dart';
 import '../models/user_model.dart';
 import '../../domain/entities/user.dart';
+import '../mappers/user_mapper.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 final Provider<AuthRepositoryImpl> authRepositoryProvider =
@@ -25,7 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
     return user.when((Failure left) async {
       return Left<Failure, User>(left);
     }, (UserModel right) async {
-      return Right<Failure, User>(right);
+      return Right<Failure, User>(UserMapper.toEntity(right));
     });
   }
 
@@ -44,7 +45,7 @@ class AuthRepositoryImpl implements AuthRepository {
     return response.when((Failure left) async {
       return Left<Failure, User>(left);
     }, (UserModel right) async {
-      return Right<Failure, User>(right);
+      return Right<Failure, User>(UserMapper.toEntity(right));
     });
   }
 
@@ -59,10 +60,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserModel?>> getCurrentUser() async {
+  Future<Either<Failure, User?>> getCurrentUser() async {
     try {
-      final user = await dataSource.getCurrentUser();
-      return Right(user);
+      final userModel = await dataSource.getCurrentUser();
+      if (userModel == null) {
+        return Right(null);
+      }
+      return Right(UserMapper.toEntity(userModel));
     } catch (e) {
       return Left(ServerFailure(e.toString(), 500));
     }
