@@ -2,8 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/entities/entity_either.dart';
 import '../../../../core/network/error/failures.dart';
+import '../repositories/home_repository.dart';
+import '../entities/hero.dart';
 import '../../data/repositories/home_repository_impl.dart';
-import '../models/heroe_model.dart';
 
 final AutoDisposeProvider<HomeUsecase> homeUsecaseProvider =
     Provider.autoDispose<HomeUsecase>((Ref<HomeUsecase> ref) {
@@ -12,16 +13,16 @@ final AutoDisposeProvider<HomeUsecase> homeUsecaseProvider =
 
 class HomeUsecase {
   HomeUsecase({required this.homeRepository});
-  final HomeRepositoryImpl homeRepository;
+  final HomeRepository homeRepository;
 
-  Future<Either<Failure, List<HeroeModel>>> getHeroes({required int offset}) async {
-    final Either<Failure, List<HeroeModel>> response =
+  Future<Either<Failure, List<Hero>>> getHeroes({required int offset}) async {
+    final Either<Failure, List<Hero>> response =
         await homeRepository.getHeroes(offset: offset);
 
     return response.when((Failure left) async {
-      return Left<Failure, List<HeroeModel>>(left);
-    }, (List<HeroeModel> right) async {
-      return Right<Failure, List<HeroeModel>>(right);
+      return Left<Failure, List<Hero>>(left);
+    }, (List<Hero> right) async {
+      return Right<Failure, List<Hero>>(right);
     });
   }
 }

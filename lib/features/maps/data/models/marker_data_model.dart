@@ -1,18 +1,18 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MarkerModel {
+class MarkerDataModel {
   final int id;
   final LatLng position;
   final BitmapDescriptor? markerUrl;
 
-  MarkerModel({required this.id, required this.position, this.markerUrl});
+  MarkerDataModel({required this.id, required this.position, this.markerUrl});
 
-  MarkerModel copyWith({
+  MarkerDataModel copyWith({
     int? id,
     LatLng? position,
     BitmapDescriptor? markerUrl,
   }) {
-    return MarkerModel(
+    return MarkerDataModel(
       id: id ?? this.id,
       position: position ?? this.position,
       markerUrl: markerUrl ?? this.markerUrl,

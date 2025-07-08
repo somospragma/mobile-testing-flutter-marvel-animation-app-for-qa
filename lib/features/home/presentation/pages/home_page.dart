@@ -58,7 +58,7 @@ class HomePageState extends ConsumerState<HomePage> {
 
     return CustomGrid(
       cardAction: () => context.push('/map'),
-      cardPressed: homeNotifier.getHeroeComics,
+      cardPressed: homeNotifier.getHeroComics,
       items: heroes,
       controller: _scrollController,
     );

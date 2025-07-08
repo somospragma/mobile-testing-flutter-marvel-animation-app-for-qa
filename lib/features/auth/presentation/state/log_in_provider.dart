@@ -6,7 +6,7 @@ import '../../../../core/network/error/failures.dart';
 import '../../../../core/router/router.dart';
 import '../../../../shared/domain/models/error_model.dart';
 import '../../../../shared/presentation/tokens/tokens.dart';
-import '../../domain/models/user_model.dart';
+import '../../domain/entities/user.dart';
 import '../../domain/usecases/auth_usecase.dart';
 import 'log_in_state.dart';
 
@@ -48,7 +48,7 @@ class LogInNotifier extends StateNotifier<LogInState> {
 
     state = state.copyWith(isLoading: true);
 
-    final Either<Failure, UserModel> response =
+    final Either<Failure, User> response =
         await authUsecase.logIn(email: state.email, password: state.password);
     state = state.copyWith(isLoading: false);
     response.when((Failure left) {
@@ -56,7 +56,7 @@ class LogInNotifier extends StateNotifier<LogInState> {
           alert: AlertModel(
               message: left.errorMessage,
               backgroundColor: CustomColor.ERROR_COLOR));
-    }, (UserModel right) async {
+    }, (User right) async {
       state = state.copyWith(name: right.displayName);
       router.push('/main');
     });

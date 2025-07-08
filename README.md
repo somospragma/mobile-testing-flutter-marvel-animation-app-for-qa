@@ -72,5 +72,9 @@ Para ejecutar está aplicación, necesitas [Java JDK](https://www.oracle.com/jav
 ## Autores
 
 
- [<img src="https://avatars.githubusercontent.com/u/51301940?s=400&u=59904da5265ef21c498b68373ed0bdb3f2c16127&v=4" width=115><br><sub>Sharon Y. Rueda F.</sub>](https://github.com/sharon-rueda) <br/> 
+ [<img src="https://avatars.githubusercontent.com/u/51301940?s=400&u=59904da5265ef21c498b68373ed0bdb3f2c16127&v=4" width=115><br><sub>Sharon Y. Rueda F.</sub>](https://github.com/sharon-rueda) <br/>
+
+ ## Contribuciones
+
+ [<img src="https://avatars.githubusercontent.com/u/123127792?v=4" width=115><br><sub>Julio C. Ruiz C.</sub>](https://github.com/juliocruizc) <br/> 
 
