@@ -28,7 +28,7 @@ class CustomGrid extends ConsumerWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 15,
             mainAxisSpacing: 15,
-            childAspectRatio: 0.6,
+            childAspectRatio: 0.7, // Ajustado para mejor proporción con más imagen
           ),
           itemBuilder: (BuildContext context, int index) {
             return CustomCard(

@@ -48,17 +48,17 @@ class HomePageState extends ConsumerState<HomePage> {
         ref.watch(homeProvider.select((HomeState state) => state.isLoading));
     final List<ItemModel> heroes =
         ref.watch(homeProvider.select((HomeState state) => state.heroes));
-    final int offset =
-        ref.watch(homeProvider.select((HomeState state) => state.offset));
+    final int currentBatch =
+        ref.watch(homeProvider.select((HomeState state) => state.currentBatch));
     final homeNotifier = ref.read(homeProvider.notifier);
 
-    if (isLoading && offset == 0) {
+    if (isLoading && currentBatch == 0) {
       return const Center(child: CircularProgressIndicator());
     }
 
     return CustomGrid(
       cardAction: () => context.push('/map'),
-      cardPressed: homeNotifier.getHeroComics,
+      cardPressed: homeNotifier.navigateToHeroDetail,
       items: heroes,
       controller: _scrollController,
     );

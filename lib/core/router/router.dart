@@ -6,6 +6,8 @@ import 'package:marvel_animation_app/features/home/presentation/pages/main_page.
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/auth/presentation/pages/sign_up_page.dart';
+import '../../features/home/presentation/pages/hero_detail_page.dart';
+import '../../features/home/domain/entities/hero.dart' as hero_entity;
 import '../../features/maps/presentation/pages/maps_page.dart';
 import '../../features/splash/presentation/pages/splash_screen.dart';
 
@@ -43,6 +45,14 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((Ref<GoRouter> r
         name: 'map',
         path: '/map',
         builder: (BuildContext context, GoRouterState state) => const MapPage(),
+      ),
+      GoRoute(
+        name: 'heroDetail',
+        path: '/hero/:heroId',
+        builder: (BuildContext context, GoRouterState state) {
+          final hero_entity.Hero hero = state.extra as hero_entity.Hero;
+          return HeroDetailPage(hero: hero);
+        },
       ),
     ],
   );

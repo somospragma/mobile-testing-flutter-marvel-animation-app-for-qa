@@ -20,9 +20,9 @@ class HomeRepositoryImpl implements HomeRepository {
   HomeRepositoryImpl({required this.dataSource});
 
   @override
-  Future<Either<Failure, List<Hero>>> getHeroes({required int offset}) async {
+  Future<Either<Failure, List<Hero>>> getHeroes({required int batch}) async {
     final Either<Failure, ApiResponseModel<List<HeroModel>>> response =
-        await dataSource.getHeroes(offset: offset);
+        await dataSource.getHeroes(batch: batch);
     return response.when((Failure left) async {
       return Left<Failure, List<Hero>>(left);
     }, (ApiResponseModel<List<HeroModel>> right) async {

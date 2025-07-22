@@ -18,11 +18,18 @@ class CustomCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Image.network(
-                item.imageUrl,
-                height: 150,
-                fit: BoxFit.cover,
+            Expanded(
+              flex: 4, // 4/5 del espacio para la imagen
+              child: Container(
+                width: double.infinity,
+                child: Hero(
+                  tag: 'hero-image-${item.id}',
+                  child: Image.network(
+                    item.imageUrl,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
+                ),
               ),
             ),
             Container(
@@ -30,22 +37,33 @@ class CustomCard extends ConsumerWidget {
               color: CustomColor.BRAND_PRIMARY_01,
             ),
             Flexible(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
                       child: Text(
                         item.title.toUpperCase(),
                         style: CustomTextStyle.FONT_STYLE_TITLE_CARD,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
                       ),
                     ),
+                    const SizedBox(height: 2),
                     Flexible(
-                        child: Text(
-                      item.subtitle,
-                      style: CustomTextStyle.FONT_STYLE_DESCRIPTION_CARD,
-                    )),
+                      child: Text(
+                        item.subtitle,
+                        style: CustomTextStyle.FONT_STYLE_DESCRIPTION_CARD,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                      ),
+                    ),
                   ],
                 ),
               ),

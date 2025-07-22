@@ -8,28 +8,28 @@ class HomeState {
     this.heroes = const [],
     this.selectedHero,
     this.isLoading = false,
-    this.offset = 0,
+    this.currentBatch = 0,
     this.alert,
   });
   final List<ItemModel> heroes;
   final hero_entity.Hero? selectedHero;
   final bool isLoading;
   final AlertModel? alert;
-  final int offset;
+  final int currentBatch;
 
   HomeState copyWith({
     List<ItemModel>? heroes,
     hero_entity.Hero? selectedHero,
     bool? isLoading,
     AlertModel? alert,
-    int? offset,
+    int? currentBatch,
   }) {
     return HomeState(
       heroes: heroes ?? this.heroes,
       selectedHero: selectedHero ?? this.selectedHero,
       isLoading: isLoading ?? this.isLoading,
       alert: alert ?? this.alert,
-      offset: offset ?? this.offset,
+      currentBatch: currentBatch ?? this.currentBatch,
     );
   }
 }
