@@ -73,4 +73,44 @@ class HomeDatasource {
       return null; // Skip failed requests
     }
   }
+
+  Future<Either<Failure, ApiResponseModel<List<HeroModel>>>> searchHeroesByName(
+      {required String name}) async {
+    try {
+      final Response<Map<String, dynamic>> result =
+          await dio.get(getSearchPath(name));
+
+      if (result.data == null || result.data!["response"] != "success") {
+        return Right(ApiResponseModel<List<HeroModel>>(
+          status: '200',
+          results: [],
+        ));
+      }
+
+      final List<dynamic> resultsData = result.data!["results"] ?? [];
+      final List<HeroModel> heroes = [];
+
+      for (final heroData in resultsData) {
+        try {
+          final hero = HeroMapper.fromJson({
+            "response": "success",
+            ...heroData,
+          });
+          heroes.add(hero);
+        } catch (e) {
+          // Skip heroes that fail to parse
+          continue;
+        }
+      }
+
+      return Right(ApiResponseModel<List<HeroModel>>(
+        status: '200',
+        results: heroes,
+      ));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message, e.statusCode));
+    } catch (e) {
+      return Left(ServerFailure('Error searching heroes by name', -1));
+    }
+  }
 }

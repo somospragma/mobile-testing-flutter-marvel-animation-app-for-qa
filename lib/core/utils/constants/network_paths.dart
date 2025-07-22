@@ -6,6 +6,11 @@ String getHeroPath(int heroId) {
   return '${env.apiToken}/$heroId';
 }
 
+String getSearchPath(String name) {
+  EnvModel env = ConfigENV.intance.getAppEnv;
+  return '${env.apiToken}/search/$name';
+}
+
 String getCharacterComicsPath({required int character}) {
   EnvModel env = ConfigENV.intance.getAppEnv;
   return '${env.webComicsUrl}$character';
