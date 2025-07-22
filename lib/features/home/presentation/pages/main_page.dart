@@ -22,6 +22,7 @@ class MainScreen extends ConsumerWidget {
       hasScroll: false,
       horizontalPadding: Spacing.NO_SPACE,
       displayBottomBar: true,
+      showSearch: currentIndex == 0, // Show search only on home page (index 0)
       body: _pages[currentIndex],
     );
   }

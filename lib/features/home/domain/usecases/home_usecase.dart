@@ -25,4 +25,15 @@ class HomeUsecase {
       return Right<Failure, List<Hero>>(right);
     });
   }
+
+  Future<Either<Failure, List<Hero>>> searchHeroesByName({required String name}) async {
+    final Either<Failure, List<Hero>> response =
+        await homeRepository.searchHeroesByName(name: name);
+
+    return response.when((Failure left) async {
+      return Left<Failure, List<Hero>>(left);
+    }, (List<Hero> right) async {
+      return Right<Failure, List<Hero>>(right);
+    });
+  }
 }

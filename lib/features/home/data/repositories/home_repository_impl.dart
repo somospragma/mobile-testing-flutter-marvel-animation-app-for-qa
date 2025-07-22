@@ -30,4 +30,16 @@ class HomeRepositoryImpl implements HomeRepository {
       return Right<Failure, List<Hero>>(heroes);
     });
   }
+
+  @override
+  Future<Either<Failure, List<Hero>>> searchHeroesByName({required String name}) async {
+    final Either<Failure, ApiResponseModel<List<HeroModel>>> response =
+        await dataSource.searchHeroesByName(name: name);
+    return response.when((Failure left) async {
+      return Left<Failure, List<Hero>>(left);
+    }, (ApiResponseModel<List<HeroModel>> right) async {
+      final heroes = right.results?.map((e) => HeroMapper.toEntity(e)).toList() ?? [];
+      return Right<Failure, List<Hero>>(heroes);
+    });
+  }
 }
