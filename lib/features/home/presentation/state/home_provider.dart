@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:marvel_animation_app/features/home/domain/models/heroe_model.dart';
+import 'package:marvel_animation_app/features/home/domain/entities/hero.dart' as hero_entity;
 import 'package:marvel_animation_app/shared/domain/models/item_model.dart';
 
 import '../../../../core/entities/entity_either.dart';
@@ -12,7 +12,7 @@ import '../../../../core/utils/web_view_service.dart';
 import '../../../../shared/domain/models/error_model.dart';
 import '../../../../shared/presentation/tokens/tokens.dart';
 import '../../domain/usecases/home_usecase.dart';
-import '../mappers/heroe_item_mapper.dart';
+import '../mappers/hero_item_mapper.dart';
 import 'home_state.dart';
 
 final StateNotifierProvider<HomeNotifier, HomeState> homeProvider =
@@ -37,7 +37,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
   Future<void> getHeroes() async {
     state = state.copyWith(isLoading: true);
 
-    final Either<Failure, List<HeroeModel>> response =
+    final Either<Failure, List<hero_entity.Hero>> response =
         await authUsecase.getHeroes(offset: state.offset);
     state = state.copyWith(isLoading: false);
     response.when((Failure left) {
@@ -45,14 +45,14 @@ class HomeNotifier extends StateNotifier<HomeState> {
           alert: AlertModel(
               message: left.errorMessage,
               backgroundColor: CustomColor.ERROR_COLOR));
-    }, (List<HeroeModel> right) async {
-      List<ItemModel> heroeItems = right.map(HeroeToItemMapper.map).toList();
+    }, (List<hero_entity.Hero> right) async {
+      List<ItemModel> heroItems = right.map(HeroToItemMapper.map).toList();
       state = state.copyWith(
-          heroes: [...state.heroes, ...heroeItems], offset: state.offset + 20);
+          heroes: [...state.heroes, ...heroItems], offset: state.offset + 20);
     });
   }
 
-  Future<void> getHeroeComics(ItemModel hero, BuildContext context)  async {
+  Future<void> getHeroComics(ItemModel hero, BuildContext context)  async {
     state = state.copyWith(isLoading: true);
     try {
       WebViewService().openWebView(context, getCharacterComicsPath(character: hero.id));

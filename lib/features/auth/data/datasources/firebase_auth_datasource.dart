@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/entities/entity_either.dart';
 import '../../../../core/network/error/failures.dart';
-import '../../domain/models/user_model.dart';
+import '../models/user_model.dart';
 
 final AutoDisposeProvider<FirebaseAuthDataSource>
     firebaseAuthDataSourceProvider =
@@ -33,7 +33,7 @@ class FirebaseAuthDataSource {
 
       final user = credential.user;
       if (user == null) {
-        return Left(ServerFailure("User creation failed", 500));
+        return Left(const ServerFailure("User creation failed", 500));
       }
 
       // Guardar en Firestore

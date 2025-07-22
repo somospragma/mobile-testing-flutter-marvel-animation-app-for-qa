@@ -7,7 +7,7 @@ import '../../../../core/network/error/failures.dart';
 import '../../../../core/router/router.dart';
 import '../../../../shared/domain/models/error_model.dart';
 import '../../../../shared/presentation/tokens/tokens.dart';
-import '../../domain/models/user_model.dart';
+import '../../domain/entities/user.dart';
 import '../../domain/usecases/auth_usecase.dart';
 import 'sign_up_state.dart';
 
@@ -75,7 +75,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
 
     state = state.copyWith(isLoading: true);
 
-    final Either<Failure, UserModel> response = await authUsecase.signUp(
+    final Either<Failure, User> response = await authUsecase.signUp(
         email: state.email,
         password: state.password,
         name: state.name,
@@ -86,7 +86,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
           alert: AlertModel(
               message: left.errorMessage,
               backgroundColor: CustomColor.ERROR_COLOR));
-    }, (UserModel right) async {
+    }, (User right) async {
       state = state.reset();
       state = state.copyWith(
           alert: AlertModel(

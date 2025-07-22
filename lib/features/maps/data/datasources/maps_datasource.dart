@@ -8,8 +8,8 @@ import '../../../../core/network/error/exceptions.dart';
 import '../../../../core/network/error/failures.dart';
 import '../../../../core/utils/constants/network_paths.dart';
 import '../../../../shared/domain/models/api_response_model.dart';
-import '../../domain/mappers/marker_mapper.dart';
-import '../../domain/models/marker_model.dart';
+import '../mappers/marker_data_mapper.dart';
+import '../models/marker_data_model.dart';
 
 final Provider<MapsDatasource> homeDatasourceProvider =
     Provider<MapsDatasource>((Ref<MapsDatasource> ref) {
@@ -19,7 +19,7 @@ final Provider<MapsDatasource> homeDatasourceProvider =
 class MapsDatasource {
   Dio dio = DioNetwork.getDio(baseUrl: ConfigENV.intance.getAppEnv.mapsApiUrl);
 
-  Future<Either<Failure, ApiResponseModel<MarkerModel?>>>
+  Future<Either<Failure, ApiResponseModel<MarkerDataModel?>>>
       getMapLocation() async {
     try {
       final Response<Map<String, dynamic>> result =
@@ -29,9 +29,9 @@ class MapsDatasource {
         return Left(ServerFailure("Invalid response", result.statusCode ?? -1));
       }
 
-      final MarkerModel marker = MarkerMapper.fromJson(result.data ?? {});
+      final MarkerDataModel marker = MarkerDataMapper.fromJsonToModel(result.data ?? {});
 
-      return Right(ApiResponseModel<MarkerModel>(
+      return Right(ApiResponseModel<MarkerDataModel>(
         status: result.statusCode.toString(),
         results: marker,
       ));
