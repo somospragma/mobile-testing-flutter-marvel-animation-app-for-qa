@@ -17,9 +17,7 @@ class ConfigENV {
     appEnv = EnvModel(
       apiUrl: dotenv.env['API_URL'] ?? '',
       envDeploy: dotenv.env['ENV'] ?? '',
-      apiKey: dotenv.env['API_KEY'] ?? '',
-      ts: dotenv.env['TS'] ?? '',
-      hash: dotenv.env['HASH'] ?? '',
+      apiToken: dotenv.env['API_TOKEN'] ?? '',
       webComicsUrl: dotenv.env['WEB_COMICS_URL'] ?? '',
       mapsApiUrl: dotenv.env['MAP_API_URL'] ?? '',
     );

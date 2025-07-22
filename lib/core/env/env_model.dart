@@ -1,18 +1,14 @@
 class EnvModel {
   EnvModel({
     required this.envDeploy,
-    required this.apiKey,
-    required this.hash,
-    required this.ts,
+    required this.apiToken,
     required this.webComicsUrl,
     required this.mapsApiUrl,
     required String apiUrl,
   }) {
     _apiUrl = apiUrl;
   }
-  String apiKey;
-  String hash;
-  String ts;
+  String apiToken;
   String envDeploy;
   String webComicsUrl;
   String mapsApiUrl;
