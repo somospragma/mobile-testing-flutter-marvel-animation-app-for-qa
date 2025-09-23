@@ -42,6 +42,13 @@ class ProfilePage extends ConsumerWidget {
             height: Spacing.SPACE_RESPONSIVE_S,
           ),
           CustomButton(
+            text: 'Verificar URLs',
+            onTap: () => context.push('/urlTest'),
+          ),
+          SizedBox(
+            height: Spacing.SPACE_RESPONSIVE_S,
+          ),
+          CustomButton(
             text: 'Cerrar Sesión',
             onTap: () => showLogoutDialog(context),
           )

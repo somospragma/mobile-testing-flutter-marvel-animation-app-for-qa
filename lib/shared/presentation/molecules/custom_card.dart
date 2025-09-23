@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marvel_animation_app/shared/domain/models/item_model.dart';
 import 'package:marvel_animation_app/shared/presentation/tokens/tokens.dart';
+import 'package:marvel_animation_app/core/utils/image_proxy_service.dart';
 
 class CustomCard extends ConsumerWidget {
   const CustomCard({super.key, required this.item, required this.cardPressed, required this.cardAction});
@@ -19,15 +20,22 @@ class CustomCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              flex: 4, // 4/5 del espacio para la imagen
-              child: Container(
+              flex: 4,
+              child: SizedBox(
                 width: double.infinity,
-                child: Hero(
-                  tag: 'hero-image-${item.id}',
-                  child: Image.network(
-                    item.imageUrl,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
+                // SOLUCIÓN DEFINITIVA: Envuelve el Hero con un RepaintBoundary.
+                // Esto crea una capa de renderizado separada para la imagen,
+                // garantizando una animación fluida y sin parpadeos.
+                child: RepaintBoundary(
+                  child: Hero(
+                    tag: 'hero-image-${item.id}',
+                    child: ImageProxyService.buildImage(
+                      imageUrl: item.imageUrl,
+                      heroName: item.title,
+                      heroId: item.id,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
                   ),
                 ),
               ),
@@ -99,10 +107,9 @@ class SlantedTopClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path();
-    path.lineTo(0, size.height); // Punto inferior izquierdo
-    path.lineTo(size.width, size.height); // Punto inferior derecho
-    path.lineTo(size.width,
-        size.height * 0.1); // Punto superior derecho (leve inclinación)
+    path.lineTo(0, size.height);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, size.height * 0.1);
     path.lineTo(0, size.height * 0.2);
     path.close();
     return path;

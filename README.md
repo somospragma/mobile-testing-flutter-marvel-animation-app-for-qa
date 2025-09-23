@@ -78,3 +78,21 @@ Para ejecutar está aplicación, necesitas [Java JDK](https://www.oracle.com/jav
 
  [<img src="https://avatars.githubusercontent.com/u/123127792?v=4" width=115><br><sub>Julio C. Ruiz C.</sub>](https://github.com/juliocruizc) <br/> 
 
+
+## Notas de implementación
+
+### Cambio de API: Marvel API a SuperHero API
+La aplicación originalmente utilizaba la Marvel API, pero ha sido migrada para usar la SuperHero API. Este cambio implicó:
+
+1. Actualización de endpoints y estructura de datos
+2. Implementación de paginación basada en ID en lugar de offset
+3. Simplificación del proceso de autenticación (solo token en URL)
+
+### Solución para carga de imágenes
+Se implementó una solución para la carga correcta de imágenes desde la SuperHero API:
+
+1. Se agregó un método `getHeroImagePath` que construye URLs específicas para imágenes
+2. Se modificó el `HeroMapper` para usar este método en lugar de las URLs directas
+3. Esto garantiza que las imágenes se carguen correctamente en toda la aplicación
+
+Para probar la carga de imágenes, se puede utilizar la clase `ImageLoadingTest` incluida en el proyecto.

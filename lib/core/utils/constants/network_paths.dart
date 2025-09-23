@@ -3,12 +3,20 @@ import '../../env/env_model.dart';
 
 String getHeroPath(int heroId) {
   EnvModel env = ConfigENV.intance.getAppEnv;
-  return '${env.apiToken}/$heroId';
+  // La API_URL ya incluye el slash final: "https://superheroapi.com/api/"
+  return '${env.apiUrl}${env.apiToken}/$heroId';
+}
+
+String getHeroImagePath(int heroId) {
+  EnvModel env = ConfigENV.intance.getAppEnv;
+  // La API_URL ya incluye el slash final: "https://superheroapi.com/api/"
+  return '${env.apiUrl}${env.apiToken}/$heroId/image';
 }
 
 String getSearchPath(String name) {
   EnvModel env = ConfigENV.intance.getAppEnv;
-  return '${env.apiToken}/search/$name';
+  // La API_URL ya incluye el slash final: "https://superheroapi.com/api/"
+  return '${env.apiUrl}${env.apiToken}/search/$name';
 }
 
 String getCharacterComicsPath({required int character}) {

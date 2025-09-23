@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../tokens/tokens.dart';
+import '../../../core/utils/image_proxy_service.dart';
 
 class ImageViewer extends StatefulWidget {
   final String imageUrl;
@@ -18,8 +19,7 @@ class ImageViewer extends StatefulWidget {
   State<ImageViewer> createState() => _ImageViewerState();
 }
 
-class _ImageViewerState extends State<ImageViewer>
-    with SingleTickerProviderStateMixin {
+class _ImageViewerState extends State<ImageViewer> with SingleTickerProviderStateMixin {
   late TransformationController _transformationController;
   late AnimationController _animationController;
   Animation<Matrix4>? _animation;
@@ -45,10 +45,7 @@ class _ImageViewerState extends State<ImageViewer>
     _animation = Matrix4Tween(
       begin: _transformationController.value,
       end: Matrix4.identity(),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
 
     _animationController.reset();
     _animation!.addListener(() {
@@ -59,32 +56,32 @@ class _ImageViewerState extends State<ImageViewer>
 
   @override
   Widget build(BuildContext context) {
+    int heroId = 0;
+    try {
+      final tagParts = widget.heroTag.split('-');
+      if (tagParts.length >= 3) {
+        heroId = int.tryParse(tagParts.last) ?? 0;
+      }
+    } catch (e) {
+      // Silently fail
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black.withOpacity(0.8),
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
-            Icons.close,
-            color: Colors.white,
-            size: 24.sp,
-          ),
+          icon: Icon(Icons.close, color: Colors.white, size: 24.sp),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           widget.heroName,
-          style: CustomTextStyle.FONT_STYLE_LABEL.copyWith(
-            color: Colors.white,
-          ),
+          style: CustomTextStyle.FONT_STYLE_LABEL.copyWith(color: Colors.white),
         ),
         actions: [
           IconButton(
-            icon: Icon(
-              Icons.refresh,
-              color: Colors.white,
-              size: 24.sp,
-            ),
+            icon: Icon(Icons.refresh, color: Colors.white, size: 24.sp),
             onPressed: _resetZoom,
           ),
         ],
@@ -96,46 +93,14 @@ class _ImageViewerState extends State<ImageViewer>
             transformationController: _transformationController,
             minScale: 0.5,
             maxScale: 5.0,
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               height: double.infinity,
-              child: Image.network(
-                widget.imageUrl,
+              child: ImageProxyService.buildImage(
+                imageUrl: widget.imageUrl,
+                heroName: widget.heroName,
+                heroId: heroId,
                 fit: BoxFit.contain,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: CustomColor.BRAND_PRIMARY_01,
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                          : null,
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) => Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: CustomColor.BRAND_PRIMARY_02,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.broken_image,
-                        size: 64.sp,
-                        color: CustomColor.BRAND_GRAY,
-                      ),
-                      SizedBox(height: 16.h),
-                      Text(
-                        'Image not available',
-                        style: CustomTextStyle.FONT_STYLE_DESCRIPTION.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ),
             ),
           ),
@@ -148,10 +113,7 @@ class _ImageViewerState extends State<ImageViewer>
           child: Text(
             'Pinch to zoom • Drag to pan • Tap refresh to reset',
             textAlign: TextAlign.center,
-            style: CustomTextStyle.FONT_STYLE_DESCRIPTION.copyWith(
-              color: Colors.white70,
-              fontSize: 12.sp,
-            ),
+            style: CustomTextStyle.FONT_STYLE_DESCRIPTION.copyWith(color: Colors.white70, fontSize: 12.sp),
           ),
         ),
       ),

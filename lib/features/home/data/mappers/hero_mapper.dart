@@ -1,13 +1,18 @@
 import '../../domain/entities/hero.dart';
 import '../models/hero_model.dart';
+import '../../../../core/utils/constants/network_paths.dart';
 
 class HeroMapper {
   static HeroModel fromJson(Map<String, dynamic> json) {
+    final int heroId = int.tryParse(json["id"]?.toString() ?? "0") ?? 0;
+    
+    String imageUrl = json["image"]?["url"] ?? '';
+    
     return HeroModel(
-      id: int.tryParse(json["id"]?.toString() ?? "0") ?? 0,
-      name: json["name"],
+      id: heroId,
+      name: json["name"] ?? 'Unknown Hero',
       description: json["biography"]?["full-name"] ?? json["name"],
-      thumbnail: json["image"]?["url"],
+      thumbnail: imageUrl, // Guardamos la URL original.
       fullName: json["biography"]?["full-name"],
       publisher: json["biography"]?["publisher"],
       alignment: json["biography"]?["alignment"],
@@ -44,20 +49,15 @@ class HeroMapper {
     return jsonList.map((json) => fromJson(json)).toList();
   }
 
-  /// Helper method to parse stat values from API strings to valid numbers
-  /// SuperHero API returns stats as strings like "100", "null", or "-"
   static String _parseStatValue(dynamic value) {
     if (value == null || value == "null" || value == "-") {
       return "0";
     }
-    
-    // Try to parse as int to validate it's a number
     final parsed = int.tryParse(value.toString());
     if (parsed != null && parsed >= 0 && parsed <= 100) {
       return parsed.toString();
     }
-    
-    return "0"; // Default fallback
+    return "0";
   }
 
   static Hero toEntity(HeroModel model) {

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/utils/constants/network_paths.dart';
 import '../../data/mappers/hero_mapper.dart';
 import 'hero_detail_state.dart';
 
@@ -14,7 +15,7 @@ class HeroDetailNotifier extends StateNotifier<HeroDetailState> {
 
     try {
       final response = await _dio.get(
-        'https://superheroapi.com/api/f0f27a795e0e94417178352f2e3f7c97/$heroId'
+        getHeroPath(heroId)
       );
 
       if (response.data != null && response.data['response'] == 'success') {

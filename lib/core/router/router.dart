@@ -10,6 +10,7 @@ import '../../features/home/presentation/pages/hero_detail_page.dart';
 import '../../features/home/domain/entities/hero.dart' as hero_entity;
 import '../../features/maps/presentation/pages/maps_page.dart';
 import '../../features/splash/presentation/pages/splash_screen.dart';
+import '../../features/home/data/test_url_verification.dart';
 
 // GoRouter configuration
 final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((Ref<GoRouter> ref) {
@@ -53,6 +54,11 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((Ref<GoRouter> r
           final hero_entity.Hero hero = state.extra as hero_entity.Hero;
           return HeroDetailPage(hero: hero);
         },
+      ),
+      GoRoute(
+        name: 'urlTest',
+        path: '/urlTest',
+        builder: (BuildContext context, GoRouterState state) => const UrlVerificationTest(),
       ),
     ],
   );
