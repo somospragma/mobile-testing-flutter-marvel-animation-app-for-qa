@@ -1,0 +1,70 @@
+name: Flutter Test Coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Flutter Tests
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.5'
+          channel: 'stable'
+          cache: true
+
+      - name: Verify Flutter installation
+        run: flutter --version
+
+      - name: Cache Pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.PUB_CACHE }}
+            ${{ github.workspace }}/.dart_tool/package_config.json
+            ${{ github.workspace }}/.packages
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Cache Flutter build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ github.workspace }}/build
+          key: ${{ runner.os }}-flutter-build-${{ hashFiles('**/pubspec.lock', '**/*.dart') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-build-
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze project source
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test --coverage
+
+      - name: Install lcov
+        run: sudo apt-get install lcov
+
+      - name: Check coverage threshold
+        run: |
+          lcov --summary coverage/lcov.info | grep "lines......:" | awk '{print $2}' | sed 's/%//' > coverage_percentage.txt
+          coverage=$(cat coverage_percentage.txt)
+          echo "Coverage: $coverage%"
+          threshold=90
+          echo "Coverage threshold: $threshold%"
+          if (( $(echo "$coverage < $threshold" | bc -l) )); then
+            echo "Test coverage is below $threshold%. Failing the job."
+            exit 1
+          fi      
+
