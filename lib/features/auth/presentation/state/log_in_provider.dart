@@ -10,20 +10,19 @@ import '../../domain/entities/user.dart';
 import '../../domain/usecases/auth_usecase.dart';
 import 'log_in_state.dart';
 
-final StateNotifierProvider<LogInNotifier, LogInState> logInProvider =
-    StateNotifierProvider<LogInNotifier, LogInState>((Ref<LogInState> ref) => LogInNotifier(
-          authUsecase: ref.read(authUsecaseProvider),
-          router: ref.read(appRouterProvider),
-        ));
+final NotifierProvider<LogInNotifier, LogInState> logInProvider =
+    NotifierProvider<LogInNotifier, LogInState>(() => LogInNotifier());
 
-class LogInNotifier extends StateNotifier<LogInState> {
+class LogInNotifier extends Notifier<LogInState> {
+  late final AuthUsecase authUsecase;
+  late final GoRouter router;
 
-  LogInNotifier({
-    required this.authUsecase,
-    required this.router,
-  }) : super(LogInState());
-  final AuthUsecase authUsecase;
-  final GoRouter router;
+  @override
+  LogInState build() {
+    authUsecase = ref.read(authUsecaseProvider);
+    router = ref.read(appRouterProvider);
+    return LogInState();
+  }
 
   void cleanAlert() {
     state = state.copyWith();

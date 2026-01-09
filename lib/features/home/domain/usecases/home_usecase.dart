@@ -6,8 +6,8 @@ import '../repositories/home_repository.dart';
 import '../entities/hero.dart';
 import '../../data/repositories/home_repository_impl.dart';
 
-final AutoDisposeProvider<HomeUsecase> homeUsecaseProvider =
-    Provider.autoDispose<HomeUsecase>((Ref<HomeUsecase> ref) {
+final Provider<HomeUsecase> homeUsecaseProvider =
+    Provider.autoDispose<HomeUsecase>((Ref ref) {
   return HomeUsecase(homeRepository: ref.read(homeRepositoryProvider));
 });
 
@@ -26,7 +26,8 @@ class HomeUsecase {
     });
   }
 
-  Future<Either<Failure, List<Hero>>> searchHeroesByName({required String name}) async {
+  Future<Either<Failure, List<Hero>>> searchHeroesByName(
+      {required String name}) async {
     final Either<Failure, List<Hero>> response =
         await homeRepository.searchHeroesByName(name: name);
 

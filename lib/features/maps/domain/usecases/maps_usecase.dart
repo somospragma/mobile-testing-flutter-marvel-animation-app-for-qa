@@ -5,8 +5,8 @@ import '../../../../core/entities/entity_either.dart';
 import '../../../../core/network/error/failures.dart';
 import '../../data/repositories/maps_repository_impl.dart';
 
-final AutoDisposeProvider<MapsUsecase> mapsUsecaseProvider =
-    Provider.autoDispose<MapsUsecase>((Ref<MapsUsecase> ref) {
+final Provider<MapsUsecase> mapsUsecaseProvider =
+    Provider.autoDispose<MapsUsecase>((Ref ref) {
   return MapsUsecase(mapsRepository: ref.read(mapsRepositoryProvider));
 });
 

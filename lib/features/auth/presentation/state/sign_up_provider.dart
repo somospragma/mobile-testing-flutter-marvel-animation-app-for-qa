@@ -11,21 +11,21 @@ import '../../domain/entities/user.dart';
 import '../../domain/usecases/auth_usecase.dart';
 import 'sign_up_state.dart';
 
-final AutoDisposeStateNotifierProvider<SignUpNotifier, SignUpState>
-    signUpProvider =
-    StateNotifierProvider.autoDispose<SignUpNotifier, SignUpState>(
-        (Ref<SignUpState> ref) => SignUpNotifier(
-              authUsecase: ref.read(authUsecaseProvider),
-              router: ref.read(appRouterProvider),
-            ));
+final NotifierProvider<SignUpNotifier, SignUpState> signUpProvider =
+    NotifierProvider.autoDispose<SignUpNotifier, SignUpState>(
+  () => SignUpNotifier(),
+);
 
-class SignUpNotifier extends StateNotifier<SignUpState> {
-  SignUpNotifier({
-    required this.authUsecase,
-    required this.router,
-  }) : super(SignUpState());
-  final AuthUsecase authUsecase;
-  final GoRouter router;
+class SignUpNotifier extends Notifier<SignUpState> {
+  late final AuthUsecase authUsecase;
+  late final GoRouter router;
+
+  @override
+  SignUpState build() {
+    authUsecase = ref.read(authUsecaseProvider);
+    router = ref.read(appRouterProvider);
+    return SignUpState();
+  }
 
   final List<DropdownMenuEntry<String>> genderEntries = [
     const DropdownMenuEntry(value: 'F', label: 'F'),

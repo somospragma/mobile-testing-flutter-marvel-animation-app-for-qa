@@ -6,10 +6,8 @@ import '../../../../core/entities/entity_either.dart';
 import '../../../../core/network/error/failures.dart';
 import '../models/user_model.dart';
 
-final AutoDisposeProvider<FirebaseAuthDataSource>
-    firebaseAuthDataSourceProvider =
-    Provider.autoDispose<FirebaseAuthDataSource>(
-        (Ref<FirebaseAuthDataSource> ref) {
+final Provider<FirebaseAuthDataSource> firebaseAuthDataSourceProvider =
+    Provider.autoDispose<FirebaseAuthDataSource>((Ref ref) {
   return FirebaseAuthDataSource(
     FirebaseAuth.instance,
     FirebaseFirestore.instance,

@@ -5,8 +5,8 @@ import '../../../../core/network/error/failures.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../entities/user.dart';
 
-final AutoDisposeProvider<AuthUsecase> authUsecaseProvider =
-    Provider.autoDispose<AuthUsecase>((Ref<AuthUsecase> ref) {
+final Provider<AuthUsecase> authUsecaseProvider =
+    Provider.autoDispose<AuthUsecase>((Ref ref) {
   return AuthUsecase(authRepository: ref.read(authRepositoryProvider));
 });
 
@@ -31,8 +31,8 @@ class AuthUsecase {
       required String password,
       required String name,
       required String gender}) async {
-    final Either<Failure, User> response = await authRepository.signUp(
-        User(email: email, password: password, displayName: name, gender: gender));
+    final Either<Failure, User> response = await authRepository.signUp(User(
+        email: email, password: password, displayName: name, gender: gender));
 
     return response.when((Failure left) async {
       return Left<Failure, User>(left);

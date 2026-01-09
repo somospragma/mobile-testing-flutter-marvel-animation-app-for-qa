@@ -13,7 +13,7 @@ import '../mappers/hero_mapper.dart';
 import '../models/hero_model.dart';
 
 final Provider<HomeDatasource> homeDatasourceProvider =
-    Provider<HomeDatasource>((Ref<HomeDatasource> ref) {
+    Provider<HomeDatasource>((Ref ref) {
   return HomeDatasource();
 });
 
@@ -34,13 +34,13 @@ class HomeDatasource {
 
       // Load heroes in parallel for better performance
       final List<Future<HeroModel?>> futures = [];
-      
+
       for (int id = startId; id <= endId; id++) {
         futures.add(_getHeroById(id));
       }
 
       final List<HeroModel?> results = await Future.wait(futures);
-      
+
       // Filter out null results (failed requests)
       for (final hero in results) {
         if (hero != null) {

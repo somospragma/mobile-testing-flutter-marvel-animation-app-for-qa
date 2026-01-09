@@ -6,14 +6,15 @@ import '../../domain/usecases/home_usecase.dart';
 import '../../domain/entities/hero.dart';
 import '../../../../core/network/error/failures.dart';
 
-final searchProvider = StateNotifierProvider<SearchNotifier, SearchState>((ref) {
-  return SearchNotifier(ref);
+final searchProvider = NotifierProvider<SearchNotifier, SearchState>(() {
+  return SearchNotifier();
 });
 
-class SearchNotifier extends StateNotifier<SearchState> {
-  final Ref ref;
-
-  SearchNotifier(this.ref) : super(const SearchState());
+class SearchNotifier extends Notifier<SearchState> {
+  @override
+  SearchState build() {
+    return const SearchState();
+  }
 
   void toggleSearch() {
     state = state.copyWith(
@@ -34,14 +35,14 @@ class SearchNotifier extends StateNotifier<SearchState> {
 
   void _performSearch(String query) async {
     state = state.copyWith(isSearching: true, errorMessage: null);
-    
+
     try {
       // Step 1: Search locally first
       final currentHeroes = ref.read(homeProvider).heroes;
       final filteredHeroes = currentHeroes.where((hero) {
         return hero.title.toLowerCase().contains(query.toLowerCase());
       }).toList();
-      
+
       // If we found local results, show them
       if (filteredHeroes.isNotEmpty) {
         state = state.copyWith(
@@ -50,11 +51,11 @@ class SearchNotifier extends StateNotifier<SearchState> {
         );
         return;
       }
-      
+
       // Step 2: If no local results, search via API
       final homeUsecase = ref.read(homeUsecaseProvider);
       final apiResult = await homeUsecase.searchHeroesByName(name: query);
-      
+
       apiResult.when(
         (Failure failure) {
           state = state.copyWith(
@@ -65,14 +66,16 @@ class SearchNotifier extends StateNotifier<SearchState> {
         },
         (List<Hero> apiHeroes) {
           // Convert Hero entities to ItemModel for UI
-          final apiResults = apiHeroes.map((hero) => ItemModel(
-            id: hero.id,
-            title: hero.name,
-            imageUrl: hero.picture,
-            subtitle: hero.fullName ?? hero.description,
-            buttonText: 'View Details',
-          )).toList();
-          
+          final apiResults = apiHeroes
+              .map((hero) => ItemModel(
+                    id: hero.id,
+                    title: hero.name,
+                    imageUrl: hero.picture,
+                    subtitle: hero.fullName ?? hero.description,
+                    buttonText: 'View Details',
+                  ))
+              .toList();
+
           state = state.copyWith(
             searchResults: apiResults,
             isSearching: false,
