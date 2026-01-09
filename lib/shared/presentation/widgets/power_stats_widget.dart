@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'stat_bar_widget.dart';
+
 class PowerStatsWidget extends StatelessWidget {
   final String? intelligence;
   final String? strength;
@@ -40,62 +42,35 @@ class PowerStatsWidget extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8.h),
-          _buildStatBar('Intelligence', intelligence, Colors.blue),
-          _buildStatBar('Strength', strength, Colors.red),
-          _buildStatBar('Speed', speed, Colors.green),
-          _buildStatBar('Durability', durability, Colors.orange),
-          _buildStatBar('Power', power, Colors.purple),
-          _buildStatBar('Combat', combat, Colors.teal),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatBar(String label, String? value, Color color) {
-    final int statValue = int.tryParse(value ?? '0') ?? 0;
-    final double percentage = statValue / 100.0;
-    
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.h),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 80.w,
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+          StatBarWidget(
+            label: 'Intelligence',
+            value: int.tryParse(intelligence ?? '0') ?? 0,
+            color: Colors.blue,
           ),
-          Expanded(
-            child: Container(
-              height: 8.h,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(4.r),
-              ),
-              child: FractionallySizedBox(
-                alignment: Alignment.centerLeft,
-                widthFactor: percentage,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(4.r),
-                  ),
-                ),
-              ),
-            ),
+          StatBarWidget(
+            label: 'Strength',
+            value: int.tryParse(strength ?? '0') ?? 0,
+            color: Colors.red,
           ),
-          SizedBox(width: 8.w),
-          Text(
-            statValue.toString(),
-            style: TextStyle(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
+          StatBarWidget(
+            label: 'Speed',
+            value: int.tryParse(speed ?? '0') ?? 0,
+            color: Colors.green,
+          ),
+          StatBarWidget(
+            label: 'Durability',
+            value: int.tryParse(durability ?? '0') ?? 0,
+            color: Colors.orange,
+          ),
+          StatBarWidget(
+            label: 'Power',
+            value: int.tryParse(power ?? '0') ?? 0,
+            color: Colors.purple,
+          ),
+          StatBarWidget(
+            label: 'Combat',
+            value: int.tryParse(combat ?? '0') ?? 0,
+            color: Colors.teal,
           ),
         ],
       ),
