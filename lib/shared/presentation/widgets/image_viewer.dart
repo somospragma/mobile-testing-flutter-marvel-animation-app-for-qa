@@ -19,7 +19,8 @@ class ImageViewer extends StatefulWidget {
   State<ImageViewer> createState() => _ImageViewerState();
 }
 
-class _ImageViewerState extends State<ImageViewer> with SingleTickerProviderStateMixin {
+class _ImageViewerState extends State<ImageViewer>
+    with SingleTickerProviderStateMixin {
   late TransformationController _transformationController;
   late AnimationController _animationController;
   Animation<Matrix4>? _animation;
@@ -41,11 +42,12 @@ class _ImageViewerState extends State<ImageViewer> with SingleTickerProviderStat
     super.dispose();
   }
 
-  void _resetZoom() {
+  void resetZoom() {
     _animation = Matrix4Tween(
       begin: _transformationController.value,
       end: Matrix4.identity(),
-    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
+    ).animate(
+        CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
 
     _animationController.reset();
     _animation!.addListener(() {
@@ -82,7 +84,7 @@ class _ImageViewerState extends State<ImageViewer> with SingleTickerProviderStat
         actions: [
           IconButton(
             icon: Icon(Icons.refresh, color: Colors.white, size: 24.sp),
-            onPressed: _resetZoom,
+            onPressed: resetZoom,
           ),
         ],
       ),
@@ -113,7 +115,8 @@ class _ImageViewerState extends State<ImageViewer> with SingleTickerProviderStat
           child: Text(
             'Pinch to zoom • Drag to pan • Tap refresh to reset',
             textAlign: TextAlign.center,
-            style: CustomTextStyle.FONT_STYLE_DESCRIPTION.copyWith(color: Colors.white70, fontSize: 12.sp),
+            style: CustomTextStyle.FONT_STYLE_DESCRIPTION
+                .copyWith(color: Colors.white70, fontSize: 12.sp),
           ),
         ),
       ),
