@@ -20,7 +20,7 @@ class HeroDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final heroDetailState = ref.watch(heroDetailProvider(hero.id));
-    final displayHero = heroDetailState.hero ?? hero;
+    final displayHero = heroDetailState.value?.hero ?? hero;
 
     return Scaffold(
       body: Stack(
@@ -77,7 +77,10 @@ class HeroDetailPage extends ConsumerWidget {
                             gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withOpacity(0.7)
+                              ],
                             ),
                           ),
                         ),
@@ -94,16 +97,20 @@ class HeroDetailPage extends ConsumerWidget {
                     children: [
                       _buildBasicInfoSection(displayHero),
                       SizedBox(height: 24.h),
-                      if (displayHero.fullName != null || displayHero.publisher != null)
+                      if (displayHero.fullName != null ||
+                          displayHero.publisher != null)
                         _buildBiographySection(displayHero),
                       SizedBox(height: 24.h),
-                      if (displayHero.gender != null || displayHero.race != null)
+                      if (displayHero.gender != null ||
+                          displayHero.race != null)
                         _buildAppearanceSection(displayHero),
                       SizedBox(height: 24.h),
-                      if (displayHero.occupation != null || displayHero.base != null)
+                      if (displayHero.occupation != null ||
+                          displayHero.base != null)
                         _buildWorkSection(displayHero),
                       SizedBox(height: 24.h),
-                      if (displayHero.groupAffiliation != null || displayHero.relatives != null)
+                      if (displayHero.groupAffiliation != null ||
+                          displayHero.relatives != null)
                         _buildConnectionsSection(displayHero),
                       SizedBox(height: 24.h),
                       _buildExternalLinkSection(context, displayHero),
@@ -138,7 +145,8 @@ class HeroDetailPage extends ConsumerWidget {
         if (hero.description.isNotEmpty && hero.description != 'No Description')
           _buildInfoRow('Description', hero.description),
         if (hero.alignment != null)
-          _buildInfoRow('Alignment', hero.alignment!, _getAlignmentColor(hero.alignment!)),
+          _buildInfoRow('Alignment', hero.alignment!,
+              _getAlignmentColor(hero.alignment!)),
       ],
     );
   }
@@ -149,12 +157,16 @@ class HeroDetailPage extends ConsumerWidget {
       title: 'Biography',
       children: [
         if (hero.fullName != null) _buildInfoRow('Full Name', hero.fullName!),
-        if (hero.publisher != null) _buildInfoRow('Publisher', hero.publisher!, Colors.blue),
-        if (hero.placeOfBirth != null) _buildInfoRow('Place of Birth', hero.placeOfBirth!),
-        if (hero.firstAppearance != null) _buildInfoRow('First Appearance', hero.firstAppearance!),
+        if (hero.publisher != null)
+          _buildInfoRow('Publisher', hero.publisher!, Colors.blue),
+        if (hero.placeOfBirth != null)
+          _buildInfoRow('Place of Birth', hero.placeOfBirth!),
+        if (hero.firstAppearance != null)
+          _buildInfoRow('First Appearance', hero.firstAppearance!),
         if (hero.alterEgos != null && hero.alterEgos != 'No alter egos found.')
           _buildInfoRow('Alter Egos', hero.alterEgos!),
-        if (hero.aliases != null && hero.aliases!.isNotEmpty) _buildAliasesRow('Aliases', hero.aliases!),
+        if (hero.aliases != null && hero.aliases!.isNotEmpty)
+          _buildAliasesRow('Aliases', hero.aliases!),
       ],
     );
   }
@@ -166,10 +178,13 @@ class HeroDetailPage extends ConsumerWidget {
       children: [
         if (hero.gender != null) _buildInfoRow('Gender', hero.gender!),
         if (hero.race != null) _buildInfoRow('Race', hero.race!),
-        if (hero.height != null && hero.height!.isNotEmpty) _buildListRow('Height', hero.height!),
-        if (hero.weight != null && hero.weight!.isNotEmpty) _buildListRow('Weight', hero.weight!),
+        if (hero.height != null && hero.height!.isNotEmpty)
+          _buildListRow('Height', hero.height!),
+        if (hero.weight != null && hero.weight!.isNotEmpty)
+          _buildListRow('Weight', hero.weight!),
         if (hero.eyeColor != null) _buildInfoRow('Eye Color', hero.eyeColor!),
-        if (hero.hairColor != null) _buildInfoRow('Hair Color', hero.hairColor!),
+        if (hero.hairColor != null)
+          _buildInfoRow('Hair Color', hero.hairColor!),
       ],
     );
   }
@@ -179,7 +194,8 @@ class HeroDetailPage extends ConsumerWidget {
       icon: Icons.work_outline,
       title: 'Work',
       children: [
-        if (hero.occupation != null) _buildInfoRow('Occupation', hero.occupation!),
+        if (hero.occupation != null)
+          _buildInfoRow('Occupation', hero.occupation!),
         if (hero.base != null) _buildInfoRow('Base of Operations', hero.base!),
       ],
     );
@@ -190,7 +206,8 @@ class HeroDetailPage extends ConsumerWidget {
       icon: Icons.group,
       title: 'Connections',
       children: [
-        if (hero.groupAffiliation != null) _buildInfoRow('Group Affiliation', hero.groupAffiliation!),
+        if (hero.groupAffiliation != null)
+          _buildInfoRow('Group Affiliation', hero.groupAffiliation!),
         if (hero.relatives != null) _buildInfoRow('Relatives', hero.relatives!),
       ],
     );
@@ -211,7 +228,10 @@ class HeroDetailPage extends ConsumerWidget {
                 SizedBox(width: 8.w),
                 Text(
                   'Power Statistics',
-                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.grey[800]),
+                  style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800]),
                 ),
               ],
             ),
@@ -230,7 +250,10 @@ class HeroDetailPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildExternalLinkSection(BuildContext context, hero_entity.Hero hero) {
+  Widget _buildExternalLinkSection(
+    BuildContext context,
+    hero_entity.Hero hero,
+  ) {
     return _buildSectionCard(
       icon: Icons.link,
       title: 'More Information',
@@ -238,15 +261,19 @@ class HeroDetailPage extends ConsumerWidget {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(
-            onPressed: () => WebViewService().openWebView(context, 'https://www.superherodb.com/'),
+            onPressed: () => WebViewService()
+                .openWebView(context, 'https://www.superherodb.com/'),
             icon: Icon(Icons.open_in_browser, color: Colors.white, size: 20.sp),
             label: Text('View on SuperHeroDB',
-                style: CustomTextStyle.FONT_STYLE_BUTTON.copyWith(color: Colors.white)),
+                style: CustomTextStyle.FONT_STYLE_BUTTON
+                    .copyWith(color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: CustomColor.BRAND_PRIMARY_01,
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: Spacing.SPACE_M.w, vertical: Spacing.SPACE_S.h),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+              padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.SPACE_M.w, vertical: Spacing.SPACE_S.h),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.r)),
             ),
           ),
         ),
@@ -259,7 +286,8 @@ class HeroDetailPage extends ConsumerWidget {
     required String title,
     required List<Widget> children,
   }) {
-    if (children.where((c) => c is! SizedBox).isEmpty) return const SizedBox.shrink();
+    if (children.where((c) => c is! SizedBox).isEmpty)
+      return const SizedBox.shrink();
     return Card(
       elevation: 2,
       color: CustomColor.BRAND_PRIMARY_02,
@@ -273,7 +301,9 @@ class HeroDetailPage extends ConsumerWidget {
               children: [
                 Icon(icon, color: CustomColor.BRAND_PRIMARY_01, size: 24.sp),
                 SizedBox(width: Spacing.SPACE_XS.w),
-                Text(title, style: CustomTextStyle.FONT_STYLE_LABEL.copyWith(color: CustomColor.BRAND_PRIMARY_00)),
+                Text(title,
+                    style: CustomTextStyle.FONT_STYLE_LABEL
+                        .copyWith(color: CustomColor.BRAND_PRIMARY_00)),
               ],
             ),
             SizedBox(height: 16.h),
@@ -293,14 +323,17 @@ class HeroDetailPage extends ConsumerWidget {
           SizedBox(
             width: 100.w,
             child: Text('$label:',
-                style: CustomTextStyle.FONT_STYLE_DESCRIPTION
-                    .copyWith(fontWeight: FontWeight.w600, color: CustomColor.BRAND_GRAY)),
+                style: CustomTextStyle.FONT_STYLE_DESCRIPTION.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: CustomColor.BRAND_GRAY)),
           ),
           Expanded(
             child: Text(value,
                 style: CustomTextStyle.FONT_STYLE_DESCRIPTION.copyWith(
                     color: valueColor ?? CustomColor.BRAND_PRIMARY_00,
-                    fontWeight: valueColor != null ? FontWeight.w500 : FontWeight.normal)),
+                    fontWeight: valueColor != null
+                        ? FontWeight.w500
+                        : FontWeight.normal)),
           ),
         ],
       ),
@@ -312,19 +345,21 @@ class HeroDetailPage extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('$label:',
-            style: CustomTextStyle.FONT_STYLE_DESCRIPTION
-                .copyWith(fontWeight: FontWeight.w600, color: CustomColor.BRAND_GRAY)),
+            style: CustomTextStyle.FONT_STYLE_DESCRIPTION.copyWith(
+                fontWeight: FontWeight.w600, color: CustomColor.BRAND_GRAY)),
         SizedBox(height: 4.h),
         Wrap(
           spacing: 8.w,
           runSpacing: 4.h,
           children: aliases
               .map((alias) => Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                     decoration: BoxDecoration(
                       color: CustomColor.BRAND_PRIMARY_01.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(color: CustomColor.BRAND_PRIMARY_01.withOpacity(0.3)),
+                      border: Border.all(
+                          color: CustomColor.BRAND_PRIMARY_01.withOpacity(0.3)),
                     ),
                     child: Text(alias,
                         style: TextStyle(
