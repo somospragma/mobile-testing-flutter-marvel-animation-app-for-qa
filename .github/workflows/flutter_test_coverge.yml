@@ -61,7 +61,7 @@ jobs:
           lcov --summary coverage/lcov.info | grep "lines......:" | awk '{print $2}' | sed 's/%//' > coverage_percentage.txt
           coverage=$(cat coverage_percentage.txt)
           echo "Coverage: $coverage%"
-          threshold=90
+          threshold=${{ vars.COVERAGE_THRESHOLD }}
           echo "Coverage threshold: $threshold%"
           if (( $(echo "$coverage < $threshold" | bc -l) )); then
             echo "Test coverage is below $threshold%. Failing the job."
