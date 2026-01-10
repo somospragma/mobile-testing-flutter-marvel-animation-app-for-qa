@@ -5,7 +5,11 @@ class MarkerDataModel {
   final LatLng position;
   final BitmapDescriptor? markerUrl;
 
-  MarkerDataModel({required this.id, required this.position, this.markerUrl});
+  const MarkerDataModel({
+    required this.id,
+    required this.position,
+    this.markerUrl,
+  });
 
   MarkerDataModel copyWith({
     int? id,
