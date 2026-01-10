@@ -24,7 +24,7 @@ class FirebaseAuthDataSource {
     try {
       // Crear usuario en Firebase Auth
       final UserCredential credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          await _firebaseAuth.createUserWithEmailAndPassword(
         email: params.email,
         password: params.password ?? '',
       );
@@ -42,7 +42,7 @@ class FirebaseAuthDataSource {
         gender: params.gender,
       );
 
-      await FirebaseFirestore.instance
+      await _firestore
           .collection('users')
           .doc(user.uid)
           .set(userModel.toJson());
