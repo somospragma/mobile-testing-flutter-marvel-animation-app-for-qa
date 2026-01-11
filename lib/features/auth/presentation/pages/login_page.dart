@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../shared/constants/widget_keys.dart';
 import '../../../../shared/domain/models/error_model.dart';
 import '../../../../shared/presentation/atoms/atoms.dart';
 import '../../../../shared/presentation/pages/loading_page.dart';
@@ -26,6 +27,7 @@ class LoginPage extends ConsumerWidget {
       if (alert != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            key: alert.key,
             content: Text(alert.message!),
             backgroundColor: alert.backgroundColor,
           ),
@@ -45,15 +47,19 @@ class LoginPage extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(height: Spacing.SPACE_XL,),
+            const SizedBox(
+              height: Spacing.SPACE_XL,
+            ),
             const SizedBox(height: Spacing.SPACE_M),
             CustomInput(
+              key: WidgetKeys.emailInput,
               label: 'Email',
               hintText: 'Enter email',
               onChanged: logInNotifier.updateEmail,
             ),
             const SizedBox(height: Spacing.SPACE_M),
             CustomInput.password(
+              key: WidgetKeys.passwordInput,
               label: 'Password',
               hintText: 'Enter password',
               onChanged: logInNotifier.updatePassword,
@@ -62,19 +68,20 @@ class LoginPage extends ConsumerWidget {
             Align(
               alignment: Alignment.centerRight,
               child: CustomButton.link(
-                key: const ValueKey('forgot-password_btn'),
+                key: WidgetKeys.forgotPasswordButton,
                 text: 'Forgot Password',
                 onTap: () => context.push('/resetPassword'),
               ),
             ),
             const SizedBox(height: Spacing.SPACE_XS),
             CustomButton(
+              key: WidgetKeys.loginButton,
               text: 'Log In',
               onTap: logInNotifier.logIn,
             ),
             const SizedBox(height: Spacing.SPACE_XS),
             CustomButton.link(
-              key: const ValueKey('sign-up_btn'),
+              key: WidgetKeys.signUpButton,
               text: 'Sign up',
               onTap: () => context.push('/signUp'),
             ),

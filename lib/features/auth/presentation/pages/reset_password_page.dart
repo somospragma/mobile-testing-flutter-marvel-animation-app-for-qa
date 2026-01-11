@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../shared/constants/widget_keys.dart';
 import '../../../../shared/presentation/atoms/atoms.dart';
 import '../../../../shared/presentation/templates/templates.dart';
 import '../../../../shared/presentation/tokens/tokens.dart';
@@ -11,7 +12,6 @@ class ResetPasswordPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return MainTemplate(
         horizontalPadding: Spacing.NO_SPACE,
         floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
@@ -36,13 +36,15 @@ class ResetPasswordPage extends ConsumerWidget {
               ),
               const SizedBox(height: Spacing.SPACE_M),
               CustomInput(
+                key: WidgetKeys.resetPasswordEmailInput,
                 hintText: 'Enter email',
-                onChanged: (_){},
+                onChanged: (_) {},
               ),
               const SizedBox(height: Spacing.SPACE_M),
               CustomButton(
+                key: WidgetKeys.resetPasswordSubmitButton,
                 text: 'Submit',
-                onTap: (){},
+                onTap: () {},
               ),
             ],
           ),
