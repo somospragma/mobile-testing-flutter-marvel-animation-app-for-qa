@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### ✨ Added
 - **CI/CD Pipeline**: GitHub Actions workflow for automated Flutter tests and coverage checks.
 - **Unit Testing Suite**: Comprehensive unit tests for multiple components.
+- **Integration Testing**: Add integration test framework for login validation.
+- **TestLab Integration**: Automated integration tests using Firebase TestLab.
 - **Development Tools**:
   - VS Code settings for Flutter SDK path configuration.
   - FVM (Flutter Version Manager) integration with Flutter 3.38.5.

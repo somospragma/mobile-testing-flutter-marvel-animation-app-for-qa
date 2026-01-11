@@ -1,0 +1,30 @@
+name: Main CI/CD Pipeline
+
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+    workflow_call:
+        inputs:
+            flutter-version:
+                description: 'Flutter version to use'
+                required: false
+                type: string
+
+jobs:
+    unit-tests-and-coverage:
+        name: 🧪 Unit Tests & Coverage
+        uses: ./.github/workflows/flutter_test_coverge.yml
+        with:
+          flutter-version: ${{ inputs.flutter-version || vars.FLUTTER_VERSION }}
+        secrets: inherit
+        
+    integration-tests:
+        name: 🚀 Integration Tests
+        needs: unit-tests-and-coverage
+        if: ${{ needs.unit-tests-and-coverage.outputs.coverage-passed == 'true' }}
+        uses: ./.github/workflows/integration_test_lab.yml
+        with:
+            flutter-version: ${{ inputs.flutter-version || vars.FLUTTER_VERSION }}
+        secrets: inherit

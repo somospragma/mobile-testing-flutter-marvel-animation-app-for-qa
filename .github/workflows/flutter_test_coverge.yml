@@ -1,15 +1,27 @@
 name: Flutter Test Coverage
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_call:
+    inputs:
+      flutter-version:
+        description: 'Flutter version to use'
+        required: false
+        default: '3.38.5'
+        type: string
+    outputs:
+      coverage-passed:
+        description: 'Whether coverage tests passed'
+        value: ${{ jobs.test.outputs.coverage-passed }}
+
+env:
+  FLUTTER_VERSION: ${{ inputs.flutter-version }}
 
 jobs:
   test:
     name: Flutter Tests
     runs-on: ubuntu-22.04
+    outputs:
+      coverage-passed: ${{ steps.coverage-check.outcome == 'success' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -17,7 +29,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.38.5'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: 'stable'
           cache: true
 
@@ -57,6 +69,7 @@ jobs:
         run: sudo apt-get install lcov
 
       - name: Check coverage threshold
+        id: coverage-check
         run: |
           lcov --summary coverage/lcov.info | grep "lines......:" | awk '{print $2}' | sed 's/%//' > coverage_percentage.txt
           coverage=$(cat coverage_percentage.txt)
