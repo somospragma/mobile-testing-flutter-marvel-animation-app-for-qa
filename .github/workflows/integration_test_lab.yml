@@ -11,7 +11,18 @@ on:
     outputs:
       integration-tests-passed:
         description: 'Whether integration tests passed'
-        value: ${{ jobs.integration-test.outputs.tests-passed }}
+        value: ${{ jobs.integration-test.outputs.integration-tests-passed }}
+
+  workflow_dispatch:
+    inputs:
+      flutter-version:
+        description: 'Flutter version to use'
+        required: false
+        default: '3.38.5'
+        type: choice
+        options:
+          - '3.38.5'
+          - '3.35.6'
 
 env:
   FLUTTER_VERSION: ${{ inputs.flutter-version }}
@@ -21,7 +32,7 @@ jobs:
     name: Integration Tests
     runs-on: ubuntu-22.04
     outputs:
-      tests-passed: ${{ steps.test-lab.outcome == 'success' }}
+      integration-tests-passed: ${{ steps.test-lab.outcome == 'success' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -45,7 +56,6 @@ jobs:
           path: |
             ${{ env.PUB_CACHE }}
             ${{ github.workspace }}/.dart_tool/package_config.json
-            ${{ github.workspace }}/.packages
           key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
           restore-keys: |
             ${{ runner.os }}-pub-
@@ -53,9 +63,13 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Free up disk space
+        run: |
+          sudo apt-get clean
+          df -h
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
@@ -72,10 +86,24 @@ jobs:
           gcloud services enable testing.googleapis.com
           gcloud services enable toolresults.googleapis.com
 
-      - name: Build APK for testing
+      - name: Clean build to avoid cache issues
         run: |
-          flutter build apk --debug
-          flutter build apk --debug integration_test/login_flow_test.dart
+          flutter clean
+          flutter pub get
+      - name: Build a debug APK for Flutter
+        run: flutter build apk --debug --target-platform android-arm64
+
+      - name: Build an Android test APK
+        run: |
+          cd android
+          ./gradlew app:assembleDebugAndroidTest
+          ./gradlew app:assembleDebug -Ptarget=integration_test/login_flow_test.dart
+          cd ..
+
+      - name: Verify APKs were created
+        run: |
+          ls -la build/app/outputs/flutter-apk/
+          ls -la build/app/outputs/apk/androidTest/debug/
 
       - name: Run integration tests on Firebase Test Lab
         id: test-lab
@@ -83,40 +111,8 @@ jobs:
           gcloud firebase test android run \
             --type instrumentation \
             --app build/app/outputs/flutter-apk/app-debug.apk \
-            --test build/app/outputs/flutter-apk/app-debug-androidTest.apk \
-            --device model=Pixel2,version=28,locale=en,orientation=portrait \
-            --device model=Pixel3,version=29,locale=en,orientation=portrait \
-            --timeout 5m \
-            --format=json > test_results.json
+            --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+            --device model=MediumPhone.arm,version=28,locale=en,orientation=portrait \
+            --device model=MediumPhone.arm,version=29,locale=en,orientation=portrait \
+            --timeout 5m 
 
-      - name: Parse test results
-        if: always()
-        run: |
-          if [ -f test_results.json ]; then
-            echo "Test results:"
-            cat test_results.json
-            # Check if tests passed
-            if grep -q '"outcome": "PASSED"' test_results.json; then
-              echo "✅ All integration tests passed!"
-            else
-              echo "❌ Some integration tests failed!"
-              exit 1
-            fi
-          else
-            echo "❌ No test results file found!"
-            exit 1
-          fi
-
-      - name: Upload test results artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: integration-test-results
-          path: |
-            test_results.json
-            *.log
-          retention-days: 30
-
-      - name: Clean up service account key
-        if: always()
-        run: rm -f service-account-key.json
