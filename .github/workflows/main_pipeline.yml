@@ -28,3 +28,13 @@ jobs:
         with:
             flutter-version: ${{ inputs.flutter-version || vars.FLUTTER_VERSION }}
         secrets: inherit
+
+    firebase-app-distribution:
+        name: 📦 Firebase App Distribution
+        needs: integration-tests
+        # if: ${{ needs.integration-tests.outputs.integration-tests-passed == 'true' }}
+        uses: ./.github/workflows/firebase_app_distribution.yml
+        with:
+            flutter-version: ${{ inputs.flutter-version || vars.FLUTTER_VERSION }}
+            release-notes: "🚀 New build from CI/CD - Commit: ${{ github.sha }}"
+        secrets: inherit
