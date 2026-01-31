@@ -1,0 +1,43 @@
+name: Firebase App Distribution
+
+on:
+  workflow_call:
+    inputs:
+      flutter-version:
+        description: 'Flutter version to use'
+        required: false
+        default: '3.38.5'
+        type: string
+      release-notes:
+        description: 'Release notes for this distribution'
+        required: false
+        default: 'New build from CI/CD pipeline'
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      flutter-version:
+        description: 'Flutter version to use'
+        required: false
+        default: '3.38.5'
+        type: choice
+        options:
+          - '3.38.5'
+          - '3.35.6'
+      release-notes:
+        description: 'Release notes for this distribution'
+        required: true
+        type: string
+
+env:
+  FLUTTER_VERSION: ${{ inputs.flutter-version }}
+
+jobs:
+  distribute:
+    name: 📦 Build & Distribute App
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      

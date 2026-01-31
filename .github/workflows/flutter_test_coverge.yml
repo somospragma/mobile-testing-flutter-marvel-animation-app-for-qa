@@ -1,0 +1,36 @@
+name: Flutter Test Coverage
+
+on:
+  workflow_call:
+    inputs:
+      flutter-version:
+        description: 'Flutter version to use'
+        required: false
+        default: '3.38.5'
+        type: string
+    
+  workflow_dispatch:
+    inputs:
+      flutter-version:
+        description: 'Flutter version to use'
+        required: false
+        default: '3.38.5'
+        type: choice
+        options:
+          - '3.38.5'
+          - '3.35.6'
+
+env:
+  FLUTTER_VERSION: ${{ inputs.flutter-version }}
+
+jobs:
+  test:
+    name: Flutter Tests
+    runs-on: ubuntu-22.04
+    outputs:
+      coverage-passed: ${{ steps.coverage-check.outcome == 'success' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      

@@ -161,3 +161,7 @@ app.*.symbols
 
 # FVM Version Cache
 .fvm/
+
+# Coverage
+coverage/
+coverage_html/
