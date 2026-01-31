@@ -81,10 +81,10 @@ jobs:
         with:
             project_id: ${{ vars.FIREBASE_PROJECT_ID }}
 
-      - name: Enable required APIs
-        run: |
-          gcloud services enable testing.googleapis.com
-          gcloud services enable toolresults.googleapis.com
+      # - name: Enable required APIs
+      #   run: |
+      #     gcloud services enable testing.googleapis.com
+      #     gcloud services enable toolresults.googleapis.com
 
       - name: Clean build to avoid cache issues
         run: |
