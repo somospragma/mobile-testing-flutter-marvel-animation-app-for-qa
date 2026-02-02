@@ -12,7 +12,7 @@ import '../mappers/marker_data_mapper.dart';
 import '../models/marker_data_model.dart';
 
 final Provider<MapsDatasource> homeDatasourceProvider =
-    Provider<MapsDatasource>((Ref<MapsDatasource> ref) {
+    Provider<MapsDatasource>((Ref ref) {
   return MapsDatasource();
 });
 
@@ -29,7 +29,8 @@ class MapsDatasource {
         return Left(ServerFailure("Invalid response", result.statusCode ?? -1));
       }
 
-      final MarkerDataModel marker = MarkerDataMapper.fromJsonToModel(result.data ?? {});
+      final MarkerDataModel marker =
+          MarkerDataMapper.fromJsonToModel(result.data ?? {});
 
       return Right(ApiResponseModel<MarkerDataModel>(
         status: result.statusCode.toString(),

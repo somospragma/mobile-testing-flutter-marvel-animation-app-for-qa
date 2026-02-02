@@ -13,11 +13,13 @@ class CustomInput extends StatelessWidget {
   });
 
   factory CustomInput.password({
+    Key? key,
     String? label,
     required String hintText,
     required ValueChanged<String> onChanged,
   }) {
     return CustomInput(
+      key: key,
       label: label,
       hintText: hintText,
       isPassword: true,
@@ -35,8 +37,14 @@ class CustomInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label != null) Text(label!, style: CustomTextStyle.FONT_STYLE_LABEL,),
-        const SizedBox(height: Spacing.SPACE_XS,),
+        if (label != null)
+          Text(
+            label!,
+            style: CustomTextStyle.FONT_STYLE_LABEL,
+          ),
+        const SizedBox(
+          height: Spacing.SPACE_XS,
+        ),
         TextField(
           onChanged: onChanged,
           obscureText: isPassword,

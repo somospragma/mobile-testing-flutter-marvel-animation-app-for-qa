@@ -1,13 +1,12 @@
 import '../../domain/entities/hero.dart';
 import '../models/hero_model.dart';
-import '../../../../core/utils/constants/network_paths.dart';
 
 class HeroMapper {
   static HeroModel fromJson(Map<String, dynamic> json) {
     final int heroId = int.tryParse(json["id"]?.toString() ?? "0") ?? 0;
-    
+
     String imageUrl = json["image"]?["url"] ?? '';
-    
+
     return HeroModel(
       id: heroId,
       name: json["name"] ?? 'Unknown Hero',
@@ -30,13 +29,13 @@ class HeroMapper {
       placeOfBirth: json["biography"]?["place-of-birth"],
       firstAppearance: json["biography"]?["first-appearance"],
       alterEgos: json["biography"]?["alter-egos"],
-      aliases: json["biography"]?["aliases"] != null 
+      aliases: json["biography"]?["aliases"] != null
           ? List<String>.from(json["biography"]["aliases"])
           : null,
-      height: json["appearance"]?["height"] != null 
+      height: json["appearance"]?["height"] != null
           ? List<String>.from(json["appearance"]["height"])
           : null,
-      weight: json["appearance"]?["weight"] != null 
+      weight: json["appearance"]?["weight"] != null
           ? List<String>.from(json["appearance"]["weight"])
           : null,
       eyeColor: json["appearance"]?["eye-color"],

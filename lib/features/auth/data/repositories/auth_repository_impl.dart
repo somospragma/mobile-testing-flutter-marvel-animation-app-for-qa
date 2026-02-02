@@ -9,7 +9,7 @@ import '../mappers/user_mapper.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 final Provider<AuthRepositoryImpl> authRepositoryProvider =
-    Provider<AuthRepositoryImpl>((Ref<AuthRepositoryImpl> ref) {
+    Provider<AuthRepositoryImpl>((Ref ref) {
   return AuthRepositoryImpl(
       dataSource: ref.read(firebaseAuthDataSourceProvider));
 });

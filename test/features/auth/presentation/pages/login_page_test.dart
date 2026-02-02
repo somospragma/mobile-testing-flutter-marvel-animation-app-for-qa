@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:marvel_animation_app/shared/constants/widget_keys.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthUsecase extends Mock implements AuthUsecase {}
@@ -16,7 +17,7 @@ class MockGoRouter extends Mock implements GoRouter {}
 
 void main() {
   late MockAuthUsecase mockAuthUsecase;
-  late GoRouter goRouter; 
+  late GoRouter goRouter;
 
   setUpAll(() async {
     await dotenv.load(fileName: ".env");
@@ -35,17 +36,20 @@ void main() {
         ),
         GoRoute(
           path: '/resetPassword',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Reset Password'))),
+          builder: (context, state) =>
+              const Scaffold(body: Center(child: Text('Reset Password'))),
         ),
         GoRoute(
           path: '/signUp',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Sign Up'))),
+          builder: (context, state) =>
+              const Scaffold(body: Center(child: Text('Sign Up'))),
         ),
       ],
     );
   });
 
-  testWidgets('Debe visualizarse la pantalla de inicio de sesión', (WidgetTester tester) async {
+  testWidgets('Debe visualizarse la pantalla de inicio de sesión',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -63,9 +67,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Log In'), findsOneWidget);
-
   });
-
 
   testWidgets('Debe navegar a reset password', (WidgetTester tester) async {
     await tester.pumpWidget(
@@ -76,13 +78,13 @@ void main() {
         child: ScreenUtilInit(
           designSize: const Size(375, 812),
           child: MaterialApp.router(
-            routerConfig: goRouter, 
+            routerConfig: goRouter,
           ),
         ),
       ),
     );
 
-    final buttonFinder = find.byKey(const ValueKey('forgot-password_btn'));
+    final buttonFinder = find.byKey(WidgetKeys.forgotPasswordButton);
     await tester.tap(buttonFinder);
 
     await tester.pumpAndSettle();
@@ -99,13 +101,13 @@ void main() {
         child: ScreenUtilInit(
           designSize: const Size(375, 812),
           child: MaterialApp.router(
-            routerConfig: goRouter, 
+            routerConfig: goRouter,
           ),
         ),
       ),
     );
 
-    final buttonFinder = find.byKey(const ValueKey('sign-up_btn'));
+    final buttonFinder = find.byKey(WidgetKeys.signUpButton);
     await tester.tap(buttonFinder);
 
     await tester.pumpAndSettle();

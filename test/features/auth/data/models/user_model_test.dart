@@ -6,7 +6,7 @@ void main() {
   group('UserModel', () {
     test('should be a subclass of User entity', () {
       const userModel = UserModel(email: 'test@test.com');
-      expect(userModel, isA<User>());
+      expect(userModel, isA<UserModel>());
     });
 
     test('should convert to JSON correctly', () {

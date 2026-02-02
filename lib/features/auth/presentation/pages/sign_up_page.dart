@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:marvel_animation_app/shared/presentation/molecules/custom_checkbox.dart';
 
+import '../../../../shared/constants/widget_keys.dart';
 import '../../../../shared/domain/models/error_model.dart';
 import '../../../../shared/presentation/atoms/custom_button.dart';
 import '../../../../shared/presentation/molecules/custom_dropdown.dart';
@@ -21,8 +22,8 @@ class SignUpPage extends ConsumerWidget {
     final bool isLoading = ref
         .watch(signUpProvider.select((SignUpState state) => state.isLoading));
 
-    final bool termsIsChecked = ref
-        .watch(signUpProvider.select((SignUpState state) => state.terms));
+    final bool termsIsChecked =
+        ref.watch(signUpProvider.select((SignUpState state) => state.terms));
 
     final SignUpNotifier signUpNotifier = ref.read(signUpProvider.notifier);
 
@@ -54,40 +55,50 @@ class SignUpPage extends ConsumerWidget {
           children: <Widget>[
             const SizedBox(height: Spacing.SPACE_M),
             CustomInput(
+              key: WidgetKeys.signUpNameInput,
               label: 'Name',
               hintText: 'Enter name',
               onChanged: signUpNotifier.updateName,
             ),
             const SizedBox(height: Spacing.SPACE_M),
             CustomInput(
-                label: 'Email',
-                hintText: 'Enter email',
-                onChanged: signUpNotifier.updateEmail),
+              key: WidgetKeys.signUpEmailInput,
+              label: 'Email',
+              hintText: 'Enter email',
+              onChanged: signUpNotifier.updateEmail,
+            ),
             const SizedBox(height: Spacing.SPACE_M),
             CustomInput.password(
+              key: WidgetKeys.signUpPasswordInput,
               label: 'Password',
               hintText: 'Enter password',
               onChanged: signUpNotifier.updatePassword,
             ),
             const SizedBox(height: Spacing.SPACE_M),
             CustomInput.password(
+              key: WidgetKeys.signUpConfirmPasswordInput,
               label: 'Confirm your password',
               hintText: 'Enter password',
               onChanged: signUpNotifier.updateConfirmPassword,
             ),
             const SizedBox(height: Spacing.SPACE_M),
             CustomDropdown(
-                label: 'Gender',
-                onSelected: signUpNotifier.updateGender,
-                menuEntries: signUpNotifier.genderEntries),
+              key: WidgetKeys.signUpGenderDropdown,
+              label: 'Gender',
+              onSelected: signUpNotifier.updateGender,
+              menuEntries: signUpNotifier.genderEntries,
+            ),
             const SizedBox(height: Spacing.SPACE_M),
             CustomCheckbox(
-                label: 'I agree to the terms and conditions',
-                isChecked: termsIsChecked,
-                onChanged: signUpNotifier.updateTerms,),
+              key: WidgetKeys.signUpTermsCheckbox,
+              label: 'I agree to the terms and conditions',
+              isChecked: termsIsChecked,
+              onChanged: signUpNotifier.updateTerms,
+            ),
             const SizedBox(height: Spacing.SPACE_M),
             Center(
               child: CustomButton(
+                key: WidgetKeys.signUpButton,
                 text: 'Sign Up',
                 onTap: signUpNotifier.signUp,
               ),
@@ -95,6 +106,7 @@ class SignUpPage extends ConsumerWidget {
             const SizedBox(height: Spacing.SPACE_XS),
             Center(
               child: CustomButton.link(
+                key: WidgetKeys.backToLoginButton,
                 text: 'Log In',
                 onTap: () => context.pop(),
               ),

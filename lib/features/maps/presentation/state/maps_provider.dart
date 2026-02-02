@@ -11,17 +11,17 @@ import '../../domain/usecases/maps_usecase.dart';
 import '../mappers/marker_entity_to_marker_mapper.dart';
 import 'maps_state.dart';
 
-final StateNotifierProvider<MapsNotifier, MapsState> mapsProvider =
-    StateNotifierProvider<MapsNotifier, MapsState>(
-        (Ref<MapsState> ref) => MapsNotifier(
-              mapsUsecase: ref.read(mapsUsecaseProvider),
-            ));
+final mapsProvider =
+    NotifierProvider<MapsNotifier, MapsState>(() => MapsNotifier());
 
-class MapsNotifier extends StateNotifier<MapsState> {
-  MapsNotifier({
-    required this.mapsUsecase,
-  }) : super(MapsState());
-  final MapsUsecase mapsUsecase;
+class MapsNotifier extends Notifier<MapsState> {
+  late final MapsUsecase mapsUsecase;
+
+  @override
+  MapsState build() {
+    mapsUsecase = ref.read(mapsUsecaseProvider);
+    return MapsState();
+  }
 
   void cleanAlert() {
     state = state.copyWith();

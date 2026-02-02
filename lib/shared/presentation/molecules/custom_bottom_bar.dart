@@ -5,7 +5,7 @@ import '../state/navigation_provider.dart';
 import '../tokens/tokens.dart';
 
 class CustomBottomBar extends ConsumerWidget {
-  const CustomBottomBar({Key? key}) : super(key: key);
+  const CustomBottomBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

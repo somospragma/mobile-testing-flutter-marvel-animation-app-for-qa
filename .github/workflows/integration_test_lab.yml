@@ -1,0 +1,126 @@
+name: Integration Tests - Firebase Test Lab
+
+on:
+  workflow_call:
+    inputs:
+      flutter-version:
+        description: 'Flutter version to use'
+        required: false
+        default: '3.38.5'
+        type: string
+      target:
+        description: 'Test target file (e.g. integration_test/main_test.dart)'
+        required: false
+        type: string
+    outputs:
+      integration-tests-passed:
+        description: 'Whether integration tests passed'
+        value: ${{ jobs.integration-test.outputs.integration-tests-passed }}
+
+  workflow_dispatch:
+    inputs:
+      flutter-version:
+        description: 'Flutter version to use'
+        required: false
+        default: '3.38.5'
+        type: choice
+        options:
+          - '3.38.5'
+          - '3.35.6'
+      target:
+        description: 'Test target file (e.g. integration_test/main_test.dart)'
+        required: false
+        type: string
+
+env:
+  FLUTTER_VERSION: ${{ inputs.flutter-version }}
+
+jobs:
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-22.04
+    outputs:
+      integration-tests-passed: ${{ steps.test-lab.outcome == 'success' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Cache Pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.PUB_CACHE }}
+            ${{ github.workspace }}/.dart_tool/package_config.json
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Free up disk space
+        run: |
+          sudo apt-get clean
+          df -h
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+            credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+
+      - name: Setup Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+            project_id: ${{ vars.FIREBASE_PROJECT_ID }}
+
+      - name: Enable required APIs
+        run: |
+          gcloud services enable testing.googleapis.com
+          gcloud services enable toolresults.googleapis.com
+
+      - name: Clean build to avoid cache issues
+        run: |
+          flutter clean
+          flutter pub get
+      - name: Build a debug APK for Flutter
+        run: flutter build apk --debug --target-platform android-arm64
+
+      - name: Build an Android test APK
+        run: |
+          cd android
+          ./gradlew app:assembleDebugAndroidTest
+          ./gradlew app:assembleDebug -Ptarget=${{ inputs.target || vars.INTEGRATION_TEST_TARGET || 'integration_test/main_test.dart' }}
+          cd ..
+
+      - name: Verify APKs were created
+        run: |
+          ls -la build/app/outputs/flutter-apk/
+          ls -la build/app/outputs/apk/androidTest/debug/
+
+      - name: Run integration tests on Firebase Test Lab
+        id: test-lab
+        run: |
+          gcloud firebase test android run \
+            --type instrumentation \
+            --app build/app/outputs/flutter-apk/app-debug.apk \
+            --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+            --device model=MediumPhone.arm,version=28,locale=en,orientation=portrait \
+            --device model=MediumPhone.arm,version=29,locale=en,orientation=portrait \
+            --timeout 5m 
+

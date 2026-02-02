@@ -13,34 +13,39 @@ import '../../features/splash/presentation/pages/splash_screen.dart';
 import '../../features/home/data/test_url_verification.dart';
 
 // GoRouter configuration
-final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((Ref<GoRouter> ref) {
+final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((Ref ref) {
   return GoRouter(
     initialLocation: '/splash',
     routes: <RouteBase>[
       GoRoute(
         name: 'splashScreen',
         path: '/splash',
-        builder: (BuildContext context, GoRouterState state) => const SplashScreen(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const SplashScreen(),
       ),
       GoRoute(
         name: 'logIn',
         path: '/',
-        builder: (BuildContext context, GoRouterState state) => const LoginPage(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const LoginPage(),
       ),
       GoRoute(
         name: 'signUp',
         path: '/signUp',
-        builder: (BuildContext context, GoRouterState state) => const SignUpPage(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const SignUpPage(),
       ),
       GoRoute(
         name: 'main',
         path: '/main',
-        builder: (BuildContext context, GoRouterState state) => const MainScreen(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const MainScreen(),
       ),
       GoRoute(
         name: 'resetPassword',
         path: '/resetPassword',
-        builder: (BuildContext context, GoRouterState state) => const ResetPasswordPage(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const ResetPasswordPage(),
       ),
       GoRoute(
         name: 'map',
@@ -58,7 +63,8 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((Ref<GoRouter> r
       GoRoute(
         name: 'urlTest',
         path: '/urlTest',
-        builder: (BuildContext context, GoRouterState state) => const UrlVerificationTest(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const UrlVerificationTest(),
       ),
     ],
   );

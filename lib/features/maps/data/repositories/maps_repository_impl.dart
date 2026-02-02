@@ -10,7 +10,7 @@ import '../../domain/repositories/maps_repository.dart';
 import '../datasources/maps_datasource.dart';
 
 final Provider<MapsRepositoryImpl> mapsRepositoryProvider =
-    Provider<MapsRepositoryImpl>((Ref<MapsRepositoryImpl> ref) {
+    Provider<MapsRepositoryImpl>((Ref ref) {
   return MapsRepositoryImpl(dataSource: ref.read(homeDatasourceProvider));
 });
 

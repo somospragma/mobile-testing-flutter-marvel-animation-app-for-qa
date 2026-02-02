@@ -15,20 +15,19 @@ import '../../domain/usecases/home_usecase.dart';
 import '../mappers/hero_item_mapper.dart';
 import 'home_state.dart';
 
-final StateNotifierProvider<HomeNotifier, HomeState> homeProvider =
-    StateNotifierProvider<HomeNotifier, HomeState>(
-        (Ref<HomeState> ref) => HomeNotifier(
-              authUsecase: ref.read(homeUsecaseProvider),
-              router: ref.read(appRouterProvider),
-            ));
+final homeProvider =
+    NotifierProvider<HomeNotifier, HomeState>(() => HomeNotifier());
 
-class HomeNotifier extends StateNotifier<HomeState> {
-  HomeNotifier({
-    required this.authUsecase,
-    required this.router,
-  }) : super(HomeState());
-  final HomeUsecase authUsecase;
-  final GoRouter router;
+class HomeNotifier extends Notifier<HomeState> {
+  late final HomeUsecase authUsecase;
+  late final GoRouter router;
+
+  @override
+  HomeState build() {
+    authUsecase = ref.read(homeUsecaseProvider);
+    router = ref.read(appRouterProvider);
+    return HomeState();
+  }
 
   void cleanAlert() {
     state = state.copyWith();
@@ -48,12 +47,13 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }, (List<hero_entity.Hero> right) async {
       List<ItemModel> heroItems = right.map(HeroToItemMapper.map).toList();
       state = state.copyWith(
-          heroes: [...state.heroes, ...heroItems], 
+          heroes: [...state.heroes, ...heroItems],
           currentBatch: state.currentBatch + 1);
     });
   }
 
-  Future<void> navigateToHeroDetail(ItemModel heroItem, BuildContext context) async {
+  Future<void> navigateToHeroDetail(
+      ItemModel heroItem, BuildContext context) async {
     // Create a basic Hero entity from the ItemModel data for navigation
     // The detail page will load the complete data when it opens
     final hero = hero_entity.Hero(
@@ -62,18 +62,20 @@ class HomeNotifier extends StateNotifier<HomeState> {
       description: heroItem.subtitle,
       picture: heroItem.imageUrl,
     );
-    
+
     // Navigate to hero detail page
-    context.pushNamed('heroDetail', 
+    context.pushNamed(
+      'heroDetail',
       pathParameters: {'heroId': heroItem.id.toString()},
       extra: hero,
     );
   }
 
-  Future<void> getHeroComics(ItemModel hero, BuildContext context)  async {
+  Future<void> getHeroComics(ItemModel hero, BuildContext context) async {
     state = state.copyWith(isLoading: true);
     try {
-      WebViewService().openWebView(context, getCharacterComicsPath(character: hero.id));
+      WebViewService()
+          .openWebView(context, getCharacterComicsPath(character: hero.id));
     } catch (e) {
       state = state.copyWith(
           alert: AlertModel(

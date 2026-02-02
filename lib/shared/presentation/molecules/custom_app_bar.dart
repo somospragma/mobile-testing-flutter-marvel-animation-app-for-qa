@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:marvel_animation_app/shared/presentation/tokens/custom_color.dart';
 import '../../../features/home/presentation/state/search_provider.dart';
 import '../tokens/spacing.dart';
-import '../tokens/custom_text_style.dart';
+import 'custom_search_bar.dart';
+import 'normal_app_bar.dart';
 
 class CustomAppBar extends ConsumerStatefulWidget {
-  const CustomAppBar({Key? key, this.onBack, this.showSearch = false}) : super(key: key);
+  const CustomAppBar({super.key, this.onBack, this.showSearch = false});
   final VoidCallback? onBack;
   final bool showSearch;
 
@@ -36,7 +36,6 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     final searchState = ref.watch(searchProvider);
-    final searchNotifier = ref.read(searchProvider.notifier);
 
     return Container(
       width: double.infinity,
@@ -48,99 +47,15 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
       ),
       color: CustomColor.BRAND_PRIMARY_00,
       child: searchState.isSearchActive
-          ? _buildSearchBar(searchNotifier)
-          : _buildNormalAppBar(searchNotifier),
-    );
-  }
-
-  Widget _buildNormalAppBar(searchNotifier) {
-    return Row(
-      mainAxisAlignment: widget.onBack != null
-          ? MainAxisAlignment.spaceBetween
-          : MainAxisAlignment.center,
-      children: [
-        if (widget.onBack != null)
-          IconButton(
-            iconSize: Spacing.SPACE_M,
-            icon: const Icon(Icons.chevron_left),
-            color: CustomColor.BRAND_PRIMARY_02,
-            onPressed: widget.onBack,
-          ),
-        Expanded(
-          child: Center(
-            child: Image.asset(
-              'assets/logo.png',
-              width: 250.w,
-              height: 50.h,
+          ? CustomSearchBar(
+              searchController: _searchController,
+              searchFocusNode: _searchFocusNode,
+            )
+          : NormalAppBar(
+              onBack: widget.onBack,
+              showSearch: widget.showSearch,
+              searchFocusNode: _searchFocusNode,
             ),
-          ),
-        ),
-        if (widget.showSearch)
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.white,
-              size: 24.sp,
-            ),
-            onPressed: () {
-              searchNotifier.toggleSearch();
-              Future.delayed(const Duration(milliseconds: 100), () {
-                _searchFocusNode.requestFocus();
-              });
-            },
-          ),
-      ],
-    );
-  }
-
-  Widget _buildSearchBar(searchNotifier) {
-    return Row(
-      children: [
-        IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-            size: 24.sp,
-          ),
-          onPressed: () {
-            _searchController.clear();
-            searchNotifier.clearSearch();
-          },
-        ),
-        Expanded(
-          child: TextField(
-            controller: _searchController,
-            focusNode: _searchFocusNode,
-            style: CustomTextStyle.FONT_STYLE_DESCRIPTION.copyWith(
-              color: Colors.white,
-            ),
-            decoration: InputDecoration(
-              hintText: 'Search heroes...',
-              hintStyle: CustomTextStyle.FONT_STYLE_DESCRIPTION.copyWith(
-                color: Colors.white70,
-              ),
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: Spacing.SPACE_S,
-                vertical: Spacing.SPACE_XS,
-              ),
-            ),
-            onChanged: searchNotifier.updateSearchQuery,
-          ),
-        ),
-        if (_searchController.text.isNotEmpty)
-          IconButton(
-            icon: Icon(
-              Icons.clear,
-              color: Colors.white,
-              size: 20.sp,
-            ),
-            onPressed: () {
-              _searchController.clear();
-              searchNotifier.updateSearchQuery('');
-            },
-          ),
-      ],
     );
   }
 }

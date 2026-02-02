@@ -138,6 +138,13 @@ local.properties
 
 # Coverage
 coverage/
+coverage_html/
+
+# Integration test reports
+integration_test/reports/
+integration_test/screenshots/
+**/integration_test/reports/
+**/integration_test/screenshots/
 
 # Symbols
 app.*.symbols

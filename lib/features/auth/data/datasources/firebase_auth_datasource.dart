@@ -6,10 +6,8 @@ import '../../../../core/entities/entity_either.dart';
 import '../../../../core/network/error/failures.dart';
 import '../models/user_model.dart';
 
-final AutoDisposeProvider<FirebaseAuthDataSource>
-    firebaseAuthDataSourceProvider =
-    Provider.autoDispose<FirebaseAuthDataSource>(
-        (Ref<FirebaseAuthDataSource> ref) {
+final Provider<FirebaseAuthDataSource> firebaseAuthDataSourceProvider =
+    Provider.autoDispose<FirebaseAuthDataSource>((Ref ref) {
   return FirebaseAuthDataSource(
     FirebaseAuth.instance,
     FirebaseFirestore.instance,
@@ -26,7 +24,7 @@ class FirebaseAuthDataSource {
     try {
       // Crear usuario en Firebase Auth
       final UserCredential credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          await _firebaseAuth.createUserWithEmailAndPassword(
         email: params.email,
         password: params.password ?? '',
       );
@@ -44,7 +42,7 @@ class FirebaseAuthDataSource {
         gender: params.gender,
       );
 
-      await FirebaseFirestore.instance
+      await _firestore
           .collection('users')
           .doc(user.uid)
           .set(userModel.toJson());

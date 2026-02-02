@@ -8,27 +8,40 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  SplashScreenState createState() => SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> {
   double _opacity = 0.0;
   double _logoSize = 100.0;
+  Timer? _animationTimer;
+  Timer? _navigationTimer;
 
   @override
   void initState() {
     super.initState();
-    
-    Future.delayed(const Duration(milliseconds: 700), () {
-      setState(() {
-        _opacity = 1.0;
-        _logoSize = 200.0;
-      });
+
+    _animationTimer = Timer(const Duration(milliseconds: 700), () {
+      if (mounted) {
+        setState(() {
+          _opacity = 1.0;
+          _logoSize = 200.0;
+        });
+      }
     });
 
-    Future.delayed(const Duration(seconds: 3), () {
-      context.go('/');
+    _navigationTimer = Timer(const Duration(seconds: 3), () {
+      if (mounted) {
+        context.go('/');
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _animationTimer?.cancel();
+    _navigationTimer?.cancel();
+    super.dispose();
   }
 
   @override
